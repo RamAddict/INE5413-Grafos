@@ -1,0 +1,13 @@
+~*
+*.swp
+*.swo
+/dependencies/
+/Debug/
+/Release/
+/benchmarks/
+.project
+.cproject
+/build
+/doc/documentation
+.DS_Store
+.vscode
