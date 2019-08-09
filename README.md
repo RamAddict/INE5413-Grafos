@@ -5,7 +5,7 @@
 git clone https://github.com/RamAddict/INE5413-Grafos
 cd INE5413-Grafos
 ```
-Make sure you have run the Catch script ```install_catch.sh``` inside the 
+Make sure you have run the Catch script ```install_catch.sh``` located inside ```grafo``` folder
 ```
 mkdir build
 cd build
