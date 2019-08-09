@@ -1,5 +1,5 @@
-#include <3rdparty/catch.hpp>
-#include <Graph/Graph.h>
+#include <catch2/catch.hpp>
+#include <grafo/Graph.h>
 
 using namespace Grafo;
 

@@ -1,6 +1,4 @@
-#include "Graph.h"
-#define CATCH_CONFIG_MAIN
-#include <catch.hpp>
+#include <grafo/Graph.h>
 namespace Grafo
 {
 

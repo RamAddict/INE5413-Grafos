@@ -1,26 +1,38 @@
-# Set up minimal cmake version
-cmake_minimum_required(VERSION 3.7.2)
+cmake_minimum_required(VERSION 3.10.2)
 
-# Set project version
-set(Grafo_VERSION 0.1.0)
+###############################################################################
+# Set default CMAKE_BUILD_TYPE
+###############################################################################
+if(NOT DEFINED CMAKE_BUILD_TYPE)
+    set(default_build_type "Debug")
+    string(CONCAT message
+        "Setting CMAKE_BUILD_TYPE to '${default_build_type}' "
+        "as none was specified."
+    )
+    message(STATUS ${message})
+    string(CONCAT out
+        "Choose the type of build, options are: "
+        "None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) "
+        "Debug Release RelWithDebInfo MinSizeRel."
+    )
+    set(CMAKE_BUILD_TYPE "${default_build_type}" CACHE STRING ${out} FORCE)
+endif()
 
-# Set project name
-project(Grafo VERSION ${ophidian_VERSION})
+###############################################################################
+# Create Project
+###############################################################################
+project(my-macro-projec)
 
-# Set c++14 globally
-set(CMAKE_CXX_STANDARD 17)
+set(as_subproject example grafo)
 
-# Set Grafo source dir
-set(Grafo_source_dir ${PROJECT_SOURCE_DIR})
+macro(find_package)
+    if(NOT ${ARGV0} IN_LIST as_subproject)
+        _find_package(${ARGV})
+    endif()
+endmacro()
 
-#include 
-include_directories(${PROJECT_SOURCE_DIR})
+# Must enable test to use ctest
+enable_testing()
 
-# add_executable(tap )
-
-# Add subdirectories
-add_subdirectory(3rdparty)
-# add_subdirectory(Graph)
-add_subdirectory(test)
-# add_subdirectory(parser)
-
+add_subdirectory(example)
+add_subdirectory(grafo)
