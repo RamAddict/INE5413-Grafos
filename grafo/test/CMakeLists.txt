@@ -2,7 +2,6 @@
 # Find catch2 testing framework
 ###############################################################################
 find_package(Catch2 REQUIRED)
-find_package(grafo REQUIRED)
 
 # Fetch test files recursevely
 file(GLOB_RECURSE Graph_tests_source
