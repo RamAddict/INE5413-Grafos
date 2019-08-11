@@ -1,6 +1,8 @@
 #ifndef GRAFO_GRAPH_H
 #define GRAFO_GRAPH_H
 
+#include <grafo/Node.h>
+// #include <grafo/NodeMap.h>
 #include <unordered_map>
 #include <vector>
 
@@ -9,18 +11,21 @@ namespace Grafo
 
 class Graph
 {
+    public:
     using ammount_t = int;
-    using node_t = /* Node class */ int;
+    using node_t = Node;
     using edge_t = /* Edge class */ int;
     using bool_t = bool;
-    using edge_container_t = std::vector<node_t>;
-    using node_container_t = std::vector<edge_t>;
+    using edge_container_t = std::vector<edge_t>;
+    using node_container_t = std::vector<node_t>;
     using parser_t = /* parser class */ int;
+    using filename_t = std::string;
 
-    public:
     // required by me
     //Ideally a factory that receives the Graph object and returns it populated.
     Graph(parser_t parser);
+    Graph();
+    Graph(filename_t name);
 
     node_t addNode();
     edge_t addEdge(node_t source, node_t target);
