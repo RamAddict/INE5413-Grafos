@@ -5,12 +5,13 @@
 
 namespace Grafo
 {
+    using id_t = int;
+    static id_t m_global_id;
 
 class Node
 {
     public:
     using node_container_t = std::vector<Node>;
-    using id_t = int;
     Node();
 
     inline bool operator==(const Node &rhs) const
@@ -33,7 +34,6 @@ class Node
 
     protected:
     id_t my_id;
-    static id_t m_global_id;
     node_container_t m_nodes{};
 };
 

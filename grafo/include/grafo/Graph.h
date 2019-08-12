@@ -43,7 +43,7 @@ class Graph
 
     
     protected:
-
+    // m_node_name_map
     node_container_t m_nodes{};
     edge_container_t m_edges{};
 };

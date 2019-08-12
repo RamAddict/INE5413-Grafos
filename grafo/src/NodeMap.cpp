@@ -6,7 +6,7 @@ namespace Grafo
 template<typename T>
 NodeMap<T>::NodeMap(const NodeMap::graph_t& graph)
 {
-    std::unordered_map<graph_t::node_t, T, NodeMap::graph_t::node_t::node_hash, NodeMap::graph_t::node_t::node_compare> m_node_map{};
+    std::unordered_map<key_t, T, key_t::node_hash, key_t::node_compare> m_node_map{};
 }
 
 // template<typename T>

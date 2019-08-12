@@ -76,4 +76,13 @@ Graph::ammount_t Graph::nodeAmmount() const
     return m_nodes.size();
 }
 
+// Addnode()
+// {
+        // constroi node()
+        // adiciona na lista de nodos 
+        // adiciona NodeMap<string>
+
+// }
+
+
 }

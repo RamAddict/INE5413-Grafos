@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt-get install build-essential
+
 DEPENDENCIES='3rdparty'
 
 rm -rf $DEPENDENCIES && mkdir $DEPENDENCIES
