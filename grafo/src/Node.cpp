@@ -8,4 +8,5 @@ namespace Grafo
     }
 
 
+    id_t Node::m_global_id{0};
 }

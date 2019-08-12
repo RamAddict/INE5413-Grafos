@@ -11,9 +11,9 @@ TEST_CASE("Creating a nodeMap", "[NodeMap] [constructor]")
     {
         // invoke parser with file
         // construct graph
-        // auto graph = Grafo::Graph();
-        Grafo::Node();
-        // Grafo::NodeMap<int> map(graph);
+        auto graph = Grafo::Graph();
+        Grafo::NodeMap<int> map{graph, 2};
+        // map
     }
 
 
