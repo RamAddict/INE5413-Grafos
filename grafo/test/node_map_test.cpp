@@ -12,15 +12,9 @@ TEST_CASE("Creating a nodeMap", "[NodeMap] [constructor]")
         // invoke parser with file
         // construct graph
         auto graph = Grafo::Graph();
-        Grafo::NodeMap<int> map{graph, 2};
-        // map
+        auto node = graph.addNode();
+        Grafo::NodeMap<int> nodeWeight{graph, 2};
+        CHECK(nodeWeight[node] == 2);
     }
 
-
-    SECTION("Creating a graph from test file" , "[graph] [constructor]")
-    {
-        // // auto graph = Grafo::Graph("../../test/test_files/agm_tiny.net");
-        // CHECK(graph.nodeAmmount() == 0);
-        // CHECK(graph.edgeAmmount() == 0);
-    }
 }

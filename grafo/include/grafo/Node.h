@@ -9,8 +9,8 @@ namespace Grafo
 
 class Node
 {
-    static id_t m_global_id;
     public:
+    static id_t m_global_id;
     using node_container_t = std::vector<Node>;
     Node();
 
@@ -25,14 +25,8 @@ class Node
             return std::hash<id_t>()(n.my_id);
         }
     };
-    struct node_compare {
-        inline bool operator()(const Node& n1, const Node& n2) const
-        {
-            return n1.my_id == n2.my_id;
-        }
-    };
-
-    protected:
+    
+    public:
     id_t my_id;
     node_container_t m_nodes{};
 };

@@ -15,7 +15,7 @@ class NodeMap
     using graph_t = Grafo::Graph;
     using key_t = graph_t::node_t;
     using value_t = T;
-    using nodeMap = std::unordered_map<key_t, T, key_t::node_hash, key_t::node_compare>;
+    using nodeMap = std::unordered_map<key_t, T, key_t::node_hash>;
     
     NodeMap(){ };
     // initializes map with given value
@@ -27,9 +27,13 @@ class NodeMap
     
     // NodeMap(const graph_t& graph, value_t t);
 
-    // T& operator[] (const key_t& key);
+    T& operator[] (const key_t& key)
+    {
+        return m_node_map[key];
+    }
+    
     private:
-    nodeMap m_node_map;
+    nodeMap m_node_map{};
 
 };
 

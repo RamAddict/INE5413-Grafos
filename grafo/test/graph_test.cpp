@@ -10,9 +10,13 @@ TEST_CASE("Creating an empty graph", "[graph] [constructor]")
         // invoke parser with file
         // construct graph
         auto graph = Grafo::Graph();
-        
+
         CHECK(graph.nodeAmmount() == 0);
         CHECK(graph.edgeAmmount() == 0);
+
+        graph.addNode();
+        CHECK(graph.nodeAmmount() == 1);
+        
     }
 
 

@@ -28,6 +28,8 @@ namespace Grafo
 
 Graph::Graph(parser_t parser)
 {
+    // // Reset node_global_counter ? 
+    // Node::m_global_id = 0;
     // populate edges and nodes
     // for
     // this->m_edges
@@ -35,11 +37,15 @@ Graph::Graph(parser_t parser)
 
 Graph::Graph()
 {
-
+    // // Reset node_global_counter ?
+    // Node::m_global_id = 0;
 }
 
 Graph::Graph(filename_t name)
 {
+    // // Reset node_global_counter ?
+    // Node::m_global_id = 0;
+    
     std::fstream file;
     file.open(name);
     
@@ -76,13 +82,15 @@ Graph::ammount_t Graph::nodeAmmount() const
     return m_nodes.size();
 }
 
-// Addnode()
-// {
-        // constroi node()
-        // adiciona na lista de nodos 
-        // adiciona NodeMap<string>
-
-// }
+Graph::node_t Graph::addNode()
+{
+    // cria nodo e adiciona na lista de nodos 
+    auto& node = m_nodes.emplace_back();
+    
+    // adiciona NodeMap<string>
+    
+    return node;
+}
 
 
 }
