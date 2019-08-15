@@ -2,7 +2,7 @@
 #define GRAFO_GRAPH_H
 
 #include <grafo/Node.h>
-// #include <grafo/NodeMap.h>
+#include <grafo/Edge.h>
 #include <unordered_map>
 #include <vector>
 
@@ -14,7 +14,7 @@ class Graph
     public:
     using ammount_t = int;
     using node_t = Node;
-    using edge_t = /* Edge class */ int;
+    using edge_t = Edge;
     using bool_t = bool;
     using edge_container_t = std::vector<edge_t>;
     using node_container_t = std::vector<node_t>;
@@ -28,7 +28,7 @@ class Graph
     Graph(filename_t name);
 
     node_t addNode();
-    edge_t addEdge(node_t source, node_t target);
+    edge_t addEdge(const node_t& source, const node_t& target);
 
     // required by teacher
     ammount_t nodeAmmount() const;

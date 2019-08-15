@@ -7,6 +7,6 @@ namespace Grafo
         my_id = m_global_id;
     }
 
-
+    
     id_t Node::m_global_id{0};
 }

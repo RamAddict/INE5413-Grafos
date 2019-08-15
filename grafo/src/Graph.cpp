@@ -91,6 +91,10 @@ Graph::node_t Graph::addNode()
     
     return node;
 }
-
+Graph::edge_t Graph::addEdge(const node_t& source, const node_t& target)
+{
+    auto& edge = m_edges.emplace_back(source, target);
+    return edge;
+}
 
 }
