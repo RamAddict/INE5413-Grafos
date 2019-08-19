@@ -12,8 +12,10 @@ TEST_CASE("Creating a edgeMap", "[edgeMap] [constructor]")
         // invoke parser with file
         // construct graph
         auto graph = Grafo::Graph();
-        auto node1 = graph.addNode();
-        auto node2 = graph.addNode();
+        auto name_1 = Node("Nodo1");
+        auto node1 = graph.addNode(name_1);
+        auto name_2 = Node("Nodo2");
+        auto node2 = graph.addNode(name_2);
         auto edge = graph.addEdge(node1, node2);
         
         Grafo::EdgeMap<int> edgeWeight{graph, 3};

@@ -2,7 +2,7 @@
 
 namespace Grafo
 {
-    Edge::Edge(const Edge::node_t& u, const Edge::node_t& v)
+    Edge::Edge(Edge::node_t* u, Edge::node_t* v)
     {
         m_global_edge_id++;
         my_id = m_global_edge_id;
@@ -12,4 +12,6 @@ namespace Grafo
 
     
     id_t Edge::m_global_edge_id{0};
+
+
 }

@@ -12,7 +12,8 @@ TEST_CASE("Creating a nodeMap", "[NodeMap] [constructor]")
         // invoke parser with file
         // construct graph
         auto graph = Grafo::Graph();
-        auto node = graph.addNode();
+        auto node = Node("SomeNode1");
+        graph.addNode(node);
         Grafo::NodeMap<int> nodeWeight{graph, 2};
         CHECK(nodeWeight[node] == 2);
     }

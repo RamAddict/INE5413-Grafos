@@ -1,7 +1,6 @@
 #ifndef GRAFO_GRAPH_H
 #define GRAFO_GRAPH_H
 
-#include <grafo/Node.h>
 #include <grafo/Edge.h>
 #include <unordered_map>
 #include <vector>
@@ -23,16 +22,19 @@ class Graph
 
     // required by me
     //Ideally a factory that receives the Graph object and returns it populated.
-    Graph(parser_t parser);
+    // Graph(parser_t parser);
     Graph();
     Graph(filename_t name);
 
-    node_t addNode();
-    edge_t addEdge(const node_t& source, const node_t& target);
+    node_t* addNode(node_t source);
+    edge_t* addEdge(node_t& source, node_t& target);
 
     // required by teacher
     ammount_t nodeAmmount() const;
     ammount_t edgeAmmount() const;
+    bool edgeExists(const node_t& source, const node_t& target) const;
+    node_t* getNode(ammount_t index);
+    edge_t* getEdge(ammount_t index);
     edge_t findEdge(/* ideally should receive the graph by parameter */ const node_t u, const node_t v) const;
     // there will be no neighbours function, will be done via iterator of the maps
     // not so sure about this ammount_t degree(const node_t node) const;

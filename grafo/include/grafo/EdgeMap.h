@@ -31,6 +31,10 @@ class EdgeMap
     {
         return m_edge_map[key];
     }
+    T& operator[] (key_t&& key)
+    {
+        return m_edge_map[key];
+    }
     
     private:
     edgeMap m_edge_map{};

@@ -31,6 +31,11 @@ class NodeMap
     {
         return m_node_map[key];
     }
+
+    T& operator[] (key_t&& key)
+    {
+        return m_node_map[key];
+    }
     
     private:
     nodeMap m_node_map{};

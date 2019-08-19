@@ -23,7 +23,7 @@ endif()
 ###############################################################################
 project(my-macro-projec)
 
-set(as_subproject example grafo)
+set(as_subproject grafo)
 
 macro(find_package)
     if(NOT ${ARGV0} IN_LIST as_subproject)
@@ -34,5 +34,5 @@ endmacro()
 # Must enable test to use ctest
 enable_testing()
 
-add_subdirectory(example)
 add_subdirectory(grafo)
+add_subdirectory(example)

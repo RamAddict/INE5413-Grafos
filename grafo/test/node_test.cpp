@@ -7,10 +7,10 @@ using namespace Grafo;
 
 TEST_CASE("Creating nodes and cheking ID", "[Node] [constructor]")
 {
-    auto node = Grafo::Node();
-    CHECK(node.my_id == 3);
-    CHECK(node.m_nodes.empty());
-    auto node2 = Grafo::Node();
-    CHECK(node2.my_id == 4);
-    CHECK(Grafo::Node::m_global_id == 4);
+    auto node = Grafo::Node("cat");
+    CHECK(node.m_label == "cat");
+    CHECK(node.m_neighbours.empty());
+    auto node2 = Grafo::Node("koshka");
+    CHECK(node2.m_label == "koshka");
+    CHECK(node2.m_neighbours.empty());
 }

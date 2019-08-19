@@ -1,5 +1,4 @@
 #include <grafo/Graph.h>
-
 #include <iostream>
 #include <fstream>
 
@@ -26,15 +25,6 @@
 namespace Grafo
 {
 
-Graph::Graph(parser_t parser)
-{
-    // // Reset node_global_counter ? 
-    // Node::m_global_id = 0;
-    // populate edges and nodes
-    // for
-    // this->m_edges
-}
-
 Graph::Graph()
 {
     // // Reset node_global_counter ?
@@ -43,33 +33,17 @@ Graph::Graph()
 
 Graph::Graph(filename_t name)
 {
-    // // Reset node_global_counter ?
-    // Node::m_global_id = 0;
     
-    std::fstream file;
-    file.open(name);
-    
+}
 
-    std::string line;
+Graph::node_t* Graph::getNode(Graph::ammount_t index)
+{
+    return &m_nodes[index];
+}
 
-    std::getline(file, line);
-    // Get number of nodes
-    auto node_ammt = std::stoi(line.substr(10));
-    m_nodes.reserve(node_ammt);
-
-    while (true)
-    {
-        std::getline(file, line);
-        if (line == "*edges")
-            break;
-        std::cout << line << std::endl;
-        
-        // addNode();
-
-    }
-
-    // system("ls");
-    // system("ls ..");
+Graph::edge_t* Graph::getEdge(Graph::ammount_t index)
+{
+    return &m_edges[index];
 }
 
 Graph::ammount_t Graph::edgeAmmount() const
@@ -82,19 +56,22 @@ Graph::ammount_t Graph::nodeAmmount() const
     return m_nodes.size();
 }
 
-Graph::node_t Graph::addNode()
+Graph::node_t* Graph::addNode(node_t source)
 {
     // cria nodo e adiciona na lista de nodos 
-    auto& node = m_nodes.emplace_back();
-    
+    return &m_nodes.emplace_back(source);
     // adiciona NodeMap<string>
-    
-    return node;
 }
-Graph::edge_t Graph::addEdge(const node_t& source, const node_t& target)
+
+Graph::edge_t* Graph::addEdge(node_t* source,node_t* target)
 {
-    auto& edge = m_edges.emplace_back(source, target);
-    return edge;
+    auto edge = Edge(&source, &target);
+    return &m_edges.emplace_back(edge);
+    // should also work the weights in here
+}
+bool Graph::edgeExists(const node_t& source, const node_t& target) const
+{
+    return source.isConnectedTo(target);
 }
 
 }

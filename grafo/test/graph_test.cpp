@@ -13,8 +13,8 @@ TEST_CASE("Creating an empty graph", "[graph] [constructor]")
 
         CHECK(graph.nodeAmmount() == 0);
         CHECK(graph.edgeAmmount() == 0);
-
-        graph.addNode();
+        auto node1 = Node("SomeNode");
+        graph.addNode(node1);
         CHECK(graph.nodeAmmount() == 1);
         
     }

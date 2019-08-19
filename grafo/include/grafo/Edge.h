@@ -11,10 +11,9 @@ class Edge
 {
     public:
     static id_t m_global_edge_id;
-    using node_t = Node;
+    using node_t = Grafo::Node;
 
-    using node_container_t = std::vector<Node>;
-    Edge(const Edge::node_t& u, const Edge::node_t& v);
+    Edge(node_t* u, node_t* v);
 
     inline bool operator==(const Edge &rhs) const
     {
@@ -27,17 +26,11 @@ class Edge
             return std::hash<id_t>()(n.my_id);
         }
     };
-    struct edge_compare {
-        inline bool operator()(const Edge& n1, const Edge& n2) const
-        {
-            return n1.my_id == n2.my_id;
-        }
-    };
 
     protected:
     id_t my_id;
-    node_t m_u;
-    node_t m_v;
+    node_t* m_u;
+    node_t* m_v;
 };
 
 

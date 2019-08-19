@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install build-essential
+#sudo apt-get install build-essential
 
 DEPENDENCIES='3rdparty'
 
