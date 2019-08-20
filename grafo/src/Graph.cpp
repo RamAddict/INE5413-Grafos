@@ -1,7 +1,6 @@
 #include <grafo/Graph.h>
 #include <iostream>
 #include <fstream>
-
 #include <cstdio>
 #include <iostream>
 #include <memory>
@@ -65,7 +64,7 @@ Graph::node_t* Graph::addNode(node_t source)
 
 Graph::edge_t* Graph::addEdge(node_t* source,node_t* target)
 {
-    auto edge = Edge(&source, &target);
+    auto edge = Edge(source, target);
     return &m_edges.emplace_back(edge);
     // should also work the weights in here
 }

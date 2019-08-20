@@ -19,7 +19,7 @@ TEST_CASE("Creating a edgeMap", "[edgeMap] [constructor]")
         auto edge = graph.addEdge(node1, node2);
         
         Grafo::EdgeMap<int> edgeWeight{graph, 3};
-        edgeWeight[edge] = 3;
+        edgeWeight[*edge] = 3;
     }
 
 }

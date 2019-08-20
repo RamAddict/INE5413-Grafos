@@ -27,7 +27,7 @@ class Graph
     Graph(filename_t name);
 
     node_t* addNode(node_t source);
-    edge_t* addEdge(node_t& source, node_t& target);
+    edge_t* addEdge(node_t* source, node_t* target);
 
     // required by teacher
     ammount_t nodeAmmount() const;
@@ -48,6 +48,7 @@ class Graph
     // m_node_name_map
     node_container_t m_nodes{};
     edge_container_t m_edges{};
+    filename_t filename;
 };
 
 

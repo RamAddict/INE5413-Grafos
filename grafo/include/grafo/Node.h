@@ -14,6 +14,7 @@ class Node
     using string_t = std::string;
     using node_container_t = std::set<Node*, Node_ptr_compare>;
     using ammount_t = double;
+    using node_t = Node;
 
 
     Node(string_t label);
