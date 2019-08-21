@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <array>
-#include </home/kel/Faculdade/INE5413-Grafos/grafo/include/grafo/Graph.h>
+#include <grafo/Graph.h>
 
 namespace Grafo
 {
@@ -58,11 +58,13 @@ namespace Grafo
       // system("ls ..");
   }
 
+}
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   auto grafo = Grafo::Graph();
   parser(grafo, argv[1]);
+  return 0;
 }
 
-}
+
