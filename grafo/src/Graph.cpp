@@ -55,16 +55,15 @@ Graph::ammount_t Graph::nodeAmmount() const
     return m_nodes.size();
 }
 
-Graph::node_t* Graph::addNode(node_t source)
+Graph::node_t* Graph::addNode(const node_t& source)
 {
     // cria nodo e adiciona na lista de nodos 
     return &m_nodes.emplace_back(source);
     // adiciona NodeMap<string>
 }
 
-Graph::edge_t* Graph::addEdge(node_t* source,node_t* target)
+Graph::edge_t* Graph::addEdge(const edge_t& edge)
 {
-    auto edge = Edge(source, target);
     return &m_edges.emplace_back(edge);
     // should also work the weights in here
 }

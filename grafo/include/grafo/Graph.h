@@ -26,8 +26,8 @@ class Graph
     Graph();
     Graph(filename_t name);
 
-    node_t* addNode(node_t source);
-    edge_t* addEdge(node_t* source, node_t* target);
+    node_t* addNode(const node_t& source);
+    edge_t* addEdge(const edge_t& edge);
 
     // required by teacher
     ammount_t nodeAmmount() const;

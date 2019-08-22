@@ -9,7 +9,6 @@ namespace Grafo
 {
   void parser(Graph& g, Graph::filename_t name)
   {
-      
       std::fstream file;
       file.open(name);
 
@@ -18,7 +17,8 @@ namespace Grafo
 
       std::getline(file, line);
       // Get number of nodes
-      auto node_ammt = std::stoi(line.substr(10));
+      
+      int node_ammt = std::atoi(line.substr(10).c_str());
       g.m_nodes.reserve(node_ammt);
 
       //  Node Population
@@ -34,7 +34,7 @@ namespace Grafo
 
           g.addNode(Node(split_line[1]));
       }
-
+      std::getline(file, line);
       //  Edge Population
       // bool directed = false;
       for (std::string line; std::getline(file, line); )
@@ -46,24 +46,26 @@ namespace Grafo
 
           // if(stod(split_line[2]) != 1)
           //   directed = true;
-          Node* u = g.getNode(stoi(split_line[0])-1);
-          Node* v = g.getNode(stoi(split_line[1])-1);
+          Node* u = g.getNode(atoi(split_line[0].c_str())-1);
+          Node* v = g.getNode(atoi(split_line[1].c_str())-1);
           u->addNeighbour(v);
           // if(!directed)
           v->addNeighbour(u);
-          g.addEdge(u,v);
+          auto edge = Edge(u, v);
+          g.addEdge(edge);
       }
-
-      // system("ls");
-      // system("ls ..");
   }
 
 }
 
 int main(int argc, char *argv[])
 {
-  auto grafo = Grafo::Graph();
-  parser(grafo, argv[1]);
+    auto grafo = Grafo::Graph();
+    Grafo::parser(grafo, argv[1]);
+    std::cout << (grafo.m_nodes.at(0)).m_label;
+
+  
+  // system("ls");
   return 0;
 }
 
