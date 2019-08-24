@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <array>
+#include <vector>
 #include <grafo/Graph.h>
 
 namespace Grafo
@@ -28,11 +29,17 @@ namespace Grafo
           // std::cout << line << std::endl;
           std::vector<std::string> split_line;
           std::istringstream iss(line);
+          std::string nodeLabel;
 
           for(std::string s; iss >> s; )
             split_line.push_back(s);
+          
+          split_line.erase(split_line.begin());
+          
+          for(std::string palavra : split_line)
+            nodeLabel += palavra;
 
-          g.addNode(Node(split_line[1]));
+          g.addNode(Node(nodeLabel));
       }
       std::getline(file, line);
       //  Edge Population
