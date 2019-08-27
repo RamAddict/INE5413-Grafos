@@ -33,8 +33,9 @@ class Graph
     ammount_t nodeAmmount() const;
     ammount_t edgeAmmount() const;
     bool edgeExists(const node_t& source, const node_t& target) const;
-    node_t* getNode(ammount_t index);
+    node_t* getNode(ammount_t index); // yo ta aqui
     edge_t* getEdge(ammount_t index);
+    int getNodeIndex(const node_t& node);
     edge_t findEdge(/* ideally should receive the graph by parameter */ const node_t u, const node_t v) const;
     // there will be no neighbours function, will be done via iterator of the maps
     // not so sure about this ammount_t degree(const node_t node) const;

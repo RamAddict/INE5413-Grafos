@@ -1,16 +1,17 @@
 #include <grafo/Node.h>
 namespace Grafo
 {
+    Node::Node()
+    {
+        
+    }
+
     Node::Node(string_t label)
     {
         // m_global_id++;
         // my_id = m_global_id;
         m_label = label;
     }
-
-
-    
-    // id_t Node::m_global_id{0};
 
     Node::ammount_t Node::nodeDegree() const
     {

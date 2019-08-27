@@ -30,6 +30,13 @@ Graph::Graph()
     // Node::m_global_id = 0;
 }
 
+int Graph::getNodeIndex(const node_t& node)
+{
+    // std::find(m_nodes.begin(), m_nodes.end(), node);
+    //wtf?
+    
+}
+
 Graph::Graph(filename_t name)
 {
     

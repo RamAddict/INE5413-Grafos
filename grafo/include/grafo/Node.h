@@ -16,7 +16,7 @@ class Node
     using ammount_t = double;
     using node_t = Node;
 
-
+    Node();
     Node(string_t label);
 
     inline bool operator==(const Node &rhs) const

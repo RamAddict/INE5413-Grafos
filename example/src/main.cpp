@@ -4,8 +4,10 @@
 #include <string>
 #include <array>
 #include <vector>
+// #include <limits>
+#include <queue>
 #include <grafo/Graph.h>
-
+#include <grafo/NodeMap.h>
 namespace Grafo
 {
   void parser(Graph& g, Graph::filename_t name)
@@ -63,15 +65,47 @@ namespace Grafo
       }
   }
 
+  std::pair<NodeMap<double>, NodeMap<Graph::node_t>> BFS(Graph& g, int s)
+  {
+    auto origin = *g.getNode(s);
+
+    // nenhum nodo é visitado
+    NodeMap<bool> nodeVisited(g, false);
+    NodeMap<double>nodeDistance(g, std::numeric_limits<double>::infinity());
+    NodeMap<Graph::node_t> nodeAncestor;
+
+    nodeVisited[origin] = true;
+    nodeDistance[origin] = 0;
+    std::queue<Graph::node_t> queue{};
+    queue.push(origin);
+    
+    while (!queue.empty())
+    {
+        auto u = queue.front(); // ta chorando no auto
+        queue.pop(); //weird flex but ok
+        for (auto v : u.m_neighbours)
+        {
+            if ( nodeVisited[*v] == false )
+            { 
+                nodeVisited[*v] = true;
+                nodeDistance[*v] = nodeDistance[u] + 1;
+                nodeAncestor[*v] = u;
+                queue.push(*v);
+            }
+        }
+    }
+    return std::make_pair(nodeDistance, nodeAncestor);
+  }
+
 }
 
 int main(int argc, char *argv[])
 {
     auto grafo = Grafo::Graph();
     Grafo::parser(grafo, argv[1]);
-    std::cout << (grafo.m_nodes.at(0)).m_label;
-
-  
+    // std::cout << (grafo.m_nodes.at(0)).m_label;
+    auto if_this_works_maybe_no_backpedalling = Grafo::BFS(grafo, 1);    
+    // for (auto fuck = if_this_works_maybe_no_backpedalling.first
   // system("ls");
   return 0;
 }
