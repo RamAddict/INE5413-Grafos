@@ -1,5 +1,7 @@
 import math
 import collections
+import heapq
+import os
 
 class Node():
     def __init__(self, label, index):
@@ -7,6 +9,15 @@ class Node():
         self.index = index
         self.neighbours = set()
     
+    def __eq__(self, other):
+        if isinstance(self, other.__class__):
+            return (self.label and self.index) == (other.label and other.index)
+        else:
+            return NotImplemented
+    
+    def __hash__(self):
+        return hash((self.label, self.index))
+
     def __str__(self):
         if(not self.index):
             return ""
@@ -38,13 +49,15 @@ class Grafo():
         return self.nodes
 
     def getEdgeWeight(self,edge):
-        return self.edges[edge]
+        # print(edge[0].getLabel())
+        return self.edgeWeight[edge]
     
     def getEdges(self):
         return self.edges
     
     def addNode(self, node: Node):
         self.nodes.append(node)
+        # self.nodes.sort()
 
     def addEdge(self, u, v, w):
         self.edges.add((u,v))
@@ -54,7 +67,7 @@ class Grafo():
         return len(self.nodes)-1
     
     def getEdgeAmmt(self):
-        return len(self.edges)
+        return len(self.edges)//2
 
     def degree(self, node: Node):
         return len(neighbours)
@@ -64,9 +77,6 @@ class Grafo():
 
     def hasEdge(self, u: Node, v: Node):
         return u in v.neighbours
-
-    def weight(self, edge):
-        return edgeWeight[edge]
 
     def getNodeFromIndex(self, idx):
         return self.nodes[idx]
@@ -86,7 +96,7 @@ class Grafo():
             split_line = file_lines[i].split(" ")
             split_line.pop(0)
             for part in split_line:
-                nodeLabel += "%s "%part
+                nodeLabel += "%s"%part
             if (nodeLabel != ""):
                 self.nodes.append(Node(nodeLabel, i))
                 #print("Nodo(indice: %d label: %s)" % (i,nodeLabel))
@@ -99,11 +109,11 @@ class Grafo():
             v = int(split_line[1])
             w = float(split_line[2])
             #print("Criando edge %d->%d , w =%d" % (u,v,w))
-            thisEdge = (self.nodes[u], self.nodes[v])
             self.nodes[u].addNeighbour(self.nodes[v])
             #if(!directed):
             self.nodes[v].addNeighbour(self.nodes[u])
-            self.addEdge( u, v, w)
+            self.addEdge(self.nodes[u], self.nodes[v], w)
+            self.addEdge(self.nodes[v], self.nodes[u], w)
             #print("Aresta do nodo %d -> %d com peso %d" % (u,v,w))
             
         
@@ -149,25 +159,47 @@ def hierholzer(g: Grafo):
     # for e in g.edges:
 #       
         
+def dijkstra(g: Grafo, s: int):
+    origin = g.getNodeFromIndex(s)
     
+    parent = {}
+    dist = {}
+    for node in g.nodes:
+        parent[node] = None
+        dist[node] = math.inf
+    dist[origin] = 0
+
+    q = []
+    q.append(origin)
+    while q:
+        q.sort()
+        v = q.pop(0)
+        for u in v.getNeighbours():
+            distance = dist[v] + g.edgeWeight.get((u, v)) #this should work
+            if distance < dist[u]:
+                parent[u] = v
+                dist[u] = distance
+    return parent
 
 def showGraph(grafo):
     for n in grafo.nodes:
        print(n)
     for e in grafo.edges:
-       print("%d->%d w = %d" % (e[0], e[1], grafo.edgeWeight.get((e[0],e[1]))))
+       print("%d->%d w = %d" % (e[0].getIndex(), e[1].getIndex(), grafo.edgeWeight.get((e[0],e[1]))))
 
 
 def main():
     g = Grafo()
-    g.openFile("Graph/facebook_santiago.net")
+    g.openFile("teste.net")
     BFS(g, 2)
-    
+    path = dijkstra(g, 2)
+    for elemt in path:
+        print(path[elemt])
     # n tem nodo 0 é pq existe de 1 -> 3 é, mas tem indice 0 no array de nodos
 
     #print(g.hasEdge(g.getNodeFromIndex(1), g.getNodeFromIndex(2)))
 
-    #showGraph(g)
+    showGraph(g)
     
 
 
