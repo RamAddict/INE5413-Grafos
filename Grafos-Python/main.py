@@ -154,31 +154,85 @@ def BFS(g: Grafo, s: int):
             showOut += ", %d" % elemt.getIndex()
     print(showOut)
 
+def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
+    node = g.getNodeFromIndex(s)
+    ciclo = [node]
+    
+    end = node
+    while(True):
+        selected_edge = 0
+        adjacent_node = 0
+        for adjacent_node in node.neighbours():
+            if(not visited[(node,adjacent_node)] or not visited[(adjacent_node,node)]):
+                selected_edge = (node,adjacent_node)
+                break
+
+        if(not selected_edge or not adjacent_node):
+            return (False, [])
+        visited[selected_edge] = True
+        node = adjacent_node
+        ciclo.append(node)
+        if node == end:
+            break
+    
+    for vertex in ciclo:
+        for adjacent_vertex in vertex.neighbours():
+            if (not visited[(vertex, adjacent_vertex)]):
+                retorno = buscarSubcicloEuleriano(g, vertex, visited)
+                if (not retorno[0]):
+                    return (False, [])
+    return (True, ciclo)
+
+
 def hierholzer(g: Grafo):
-    edge_count = {}
-    # for e in g.edges:
-#       
+    visited = {}
+    for edge in g.edges:
+        visited[edge] = False
+
+    node = g.getNodeFromIndex(1)
+    retorno = buscarSubcicloEuleriano(g, node, visited)
+    if (not retorno[0]):
+        return (False, [])
         
+class costAndNode:
+    def __init__(self, cost, node):
+        self.cost = cost
+        self.node = node
+    
+    def __lt__(self, other):
+        return self.cost < other.cost
+    
+    def getNode(self):
+        return self.node
+
 def dijkstra(g: Grafo, s: int):
     origin = g.getNodeFromIndex(s)
     
     parent = {}
     dist = {}
-    for node in g.nodes:
+    visited = {}
+    heap = []
+    for node in g.nodes[1:]:
         parent[node] = None
         dist[node] = math.inf
+        visited[node] = False
+        heapq.heappush(heap, costAndNode(math.inf, node)) # biatch
     dist[origin] = 0
+    heapq.heappush(heap, costAndNode(0, origin))
 
-    q = []
-    q.append(origin)
-    while q:
-        q.sort()
-        v = q.pop(0)
-        for u in v.getNeighbours():
-            distance = dist[v] + g.edgeWeight.get((u, v)) #this should work
-            if distance < dist[u]:
-                parent[u] = v
-                dist[u] = distance
+    print(visited.values())
+    
+    # while False in visited.values():
+    #     visited.values()
+    #     v = heapq.heappop(heap) # faz uma heap, ordenando por god knows what
+    #     visited[v] = True # fala q ele eh visitado
+    #     for u in v.getNode().getNeighbours(): # pega os vizinhos
+    #         if visited[u] == False: # que nao foram visitados
+    #             distance = dist[v.getNode()] + g.edgeWeight.get((u, v.getNode())) #se for menor q a distancia deles
+    #             if distance < dist[u]:
+    #                 parent[u] = v.getNode() # seta o pai pra poder reconstruir
+    #                 dist[u] = distance # atualiza (propaga)
+    #                 heapq.heappush(heap, costAndNode(distance, u))
     return parent
 
 def showGraph(grafo):
@@ -190,7 +244,7 @@ def showGraph(grafo):
 
 def main():
     g = Grafo()
-    g.openFile("teste.net")
+    g.openFile("Graph/teste1.net")
     BFS(g, 2)
     path = dijkstra(g, 2)
     for elemt in path:
@@ -199,7 +253,7 @@ def main():
 
     #print(g.hasEdge(g.getNodeFromIndex(1), g.getNodeFromIndex(2)))
 
-    showGraph(g)
+    # showGraph(g)
     
 
 
