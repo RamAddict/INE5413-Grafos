@@ -162,7 +162,7 @@ def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
     while(True):
         selected_edge = 0
         adjacent_node = 0
-        for adjacent_node in node.neighbours():
+        for adjacent_node in node.getNeighbours():
             if(not visited[(node,adjacent_node)] or not visited[(adjacent_node,node)]):
                 selected_edge = (node,adjacent_node)
                 break
@@ -176,9 +176,9 @@ def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
             break
     
     for vertex in ciclo:
-        for adjacent_vertex in vertex.neighbours():
+        for adjacent_vertex in vertex.getNeighbours():
             if (not visited[(vertex, adjacent_vertex)]):
-                retorno = buscarSubcicloEuleriano(g, vertex, visited)
+                retorno = buscarSubcicloEuleriano(g, vertex.getIndex(), visited)
                 if (not retorno[0]):
                     return (False, [])
     return (True, ciclo)
@@ -190,9 +190,18 @@ def hierholzer(g: Grafo):
         visited[edge] = False
 
     node = g.getNodeFromIndex(1)
-    retorno = buscarSubcicloEuleriano(g, node, visited)
-    if (not retorno[0]):
-        return (False, [])
+    retorno = buscarSubcicloEuleriano(g, node.getIndex(), visited)
+    if ((not retorno[0]) or (False in visited)):
+        print(0)
+    else:
+        print(1)
+        out = ""
+        for vertex in retorno[1]:
+            out += str(vertex.getIndex()) + ", "
+        print(out)
+
+
+            
         
 class costAndNode:
     def __init__(self, cost, node):
@@ -220,7 +229,7 @@ def dijkstra(g: Grafo, s: int):
     dist[origin] = 0
     heapq.heappush(heap, costAndNode(0, origin))
 
-    print(visited.values())
+    # print(visited.values())
     
     # while False in visited.values():
     #     visited.values()
@@ -244,11 +253,12 @@ def showGraph(grafo):
 
 def main():
     g = Grafo()
-    g.openFile("Graph/teste1.net")
-    BFS(g, 2)
-    path = dijkstra(g, 2)
-    for elemt in path:
-        print(path[elemt])
+    g.openFile("Graph/ContemCicloEuleriano.net")
+    BFS(g, 1)
+    #path = dijkstra(g, 2)
+    #for elemt in path:
+    #    print(path[elemt])
+    hierholzer(g)
     # n tem nodo 0 é pq existe de 1 -> 3 é, mas tem indice 0 no array de nodos
 
     #print(g.hasEdge(g.getNodeFromIndex(1), g.getNodeFromIndex(2)))
