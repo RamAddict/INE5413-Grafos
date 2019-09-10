@@ -183,7 +183,7 @@ def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
                 retorno = buscarSubcicloEuleriano(g, vertex.getIndex(), visited)
                 if (not retorno[0]):
                     return (False, [])
-            ciclo = joinCycles(ciclo,retorno[1])
+                ciclo = joinCycles(ciclo,retorno[1])
             # retorno[1]. merge cycles, fuck me
     return (True, ciclo)
 
@@ -259,11 +259,10 @@ def showGraph(grafo):
 
 def main():
     g = Grafo()
-    g.openFile("Graph/teste1.net")
+    g.openFile("Graph/ContemCicloEuleriano.net")
     #BFS(g, 1)
-    #hierholzer(g)
-    path = bellmanFord(g, 2)
-    dist = path[1]
+    hierholzer(g)
+    #bellmanFord(g, 2)
     #print(joinCycles(['a','b','c','a'], ['c','e','d','c']))
     #for elemt in path:
     #    print(path[elemt])
