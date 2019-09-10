@@ -2,6 +2,7 @@ import math
 import collections
 import heapq
 import os
+import random
 
 class Node():
     def __init__(self, label, index):
@@ -167,9 +168,10 @@ def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
                 selected_edge = (node,adjacent_node)
                 break
 
-        if(not selected_edge or not adjacent_node):
+        if(not selected_edge):
             return (False, [])
         visited[selected_edge] = True
+        visited[adjacent_node, node] = True
         node = adjacent_node
         ciclo.append(node)
         if node == end:
@@ -181,15 +183,19 @@ def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
                 retorno = buscarSubcicloEuleriano(g, vertex.getIndex(), visited)
                 if (not retorno[0]):
                     return (False, [])
+            ciclo = joinCycles(ciclo,retorno[1])
+            # retorno[1]. merge cycles, fuck me
     return (True, ciclo)
 
 
+
+#  Grafo direcionado ou não?
 def hierholzer(g: Grafo):
     visited = {}
     for edge in g.edges:
         visited[edge] = False
 
-    node = g.getNodeFromIndex(1)
+    node = g.getNodeFromIndex(random.randint(1,g.getNodeAmmt()-1))
     retorno = buscarSubcicloEuleriano(g, node.getIndex(), visited)
     if ((not retorno[0]) or (False in visited)):
         print(0)
@@ -200,49 +206,49 @@ def hierholzer(g: Grafo):
             out += str(vertex.getIndex()) + ", "
         print(out)
 
+def joinCycles(l1: [], l2: []):
+    element = l2[0]
+    mid = l1.index(element)
+    l1.remove(element)
+    for i in range(len(l2)):
+        l1.insert(mid+i,l2[i])
+    return l1
 
-            
-        
-class costAndNode:
-    def __init__(self, cost, node):
-        self.cost = cost
-        self.node = node
+def printBell(dist: dict, ancest: dict, node: Node):
+    origin = node
+    out = "%s" % node.getIndex()
+    while(ancest[node] != 0):
+        out += ", %s" % ancest[node].getIndex()
+        node = ancest[node]
+    out+="; d=%d" % dist[origin]
     
-    def __lt__(self, other):
-        return self.cost < other.cost
+    return out
     
-    def getNode(self):
-        return self.node
 
-def dijkstra(g: Grafo, s: int):
+
+def bellmanFord(g: Grafo, s: int):
     origin = g.getNodeFromIndex(s)
-    
-    parent = {}
     dist = {}
-    visited = {}
-    heap = []
-    for node in g.nodes[1:]:
-        parent[node] = None
-        dist[node] = math.inf
-        visited[node] = False
-        heapq.heappush(heap, costAndNode(math.inf, node)) # biatch
-    dist[origin] = 0
-    heapq.heappush(heap, costAndNode(0, origin))
+    ancetral = {}
 
-    # print(visited.values())
-    
-    # while False in visited.values():
-    #     visited.values()
-    #     v = heapq.heappop(heap) # faz uma heap, ordenando por god knows what
-    #     visited[v] = True # fala q ele eh visitado
-    #     for u in v.getNode().getNeighbours(): # pega os vizinhos
-    #         if visited[u] == False: # que nao foram visitados
-    #             distance = dist[v.getNode()] + g.edgeWeight.get((u, v.getNode())) #se for menor q a distancia deles
-    #             if distance < dist[u]:
-    #                 parent[u] = v.getNode() # seta o pai pra poder reconstruir
-    #                 dist[u] = distance # atualiza (propaga)
-    #                 heapq.heappush(heap, costAndNode(distance, u))
-    return parent
+    for n in g.getNodes()[1:]:
+        dist[n] = math.inf
+        ancetral[n] = 0
+    dist[origin] = 0
+
+    for i in g.nodes[1:g.getNodeAmmt()-1]:
+        for edge in g.getEdges():
+            if (dist[edge[1]] > dist[edge[0]] + g.edgeWeight[edge]):
+                dist[edge[1]] = dist[edge[0]] + g.edgeWeight[edge]
+                ancetral[edge[1]] = edge[0]
+
+    for edge in g.getEdges():
+        if (dist[edge[1]] > dist[edge[0]] + g.edgeWeight[edge]):
+            return (False, None, None)
+    for node in g.getNodes()[1:]:
+        print("%d: %s" % (node.getIndex(), printBell(dist,ancetral, node)))
+        
+    return (True, dist, ancetral)
 
 def showGraph(grafo):
     for n in grafo.nodes:
@@ -253,12 +259,14 @@ def showGraph(grafo):
 
 def main():
     g = Grafo()
-    g.openFile("Graph/ContemCicloEuleriano.net")
-    BFS(g, 1)
-    #path = dijkstra(g, 2)
+    g.openFile("Graph/teste1.net")
+    #BFS(g, 1)
+    #hierholzer(g)
+    path = bellmanFord(g, 2)
+    dist = path[1]
+    #print(joinCycles(['a','b','c','a'], ['c','e','d','c']))
     #for elemt in path:
     #    print(path[elemt])
-    hierholzer(g)
     # n tem nodo 0 é pq existe de 1 -> 3 é, mas tem indice 0 no array de nodos
 
     #print(g.hasEdge(g.getNodeFromIndex(1), g.getNodeFromIndex(2)))
