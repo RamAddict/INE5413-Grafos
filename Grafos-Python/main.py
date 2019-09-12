@@ -9,13 +9,13 @@ class Node():
         self.label = label
         self.index = index
         self.neighbours = set()
-    
+
     def __eq__(self, other):
         if isinstance(self, other.__class__):
             return (self.label and self.index) == (other.label and other.index)
         else:
             return NotImplemented
-    
+
     def __hash__(self):
         return hash((self.label, self.index))
 
@@ -25,16 +25,16 @@ class Node():
         for nodo in self.neighbours:
             vizinhos += str("\t%s\n" % (nodo.getLabel()))
         return "%s%s" % (retorno, vizinhos)
-    
+
     def getLabel(self):
         return self.label
-    
+
     def getIndex(self):
         return self.index
 
     def addNeighbour(self, node):
         self.neighbours.add(node)
-    
+
     def getNeighbours(self):
         return self.neighbours
 
@@ -49,11 +49,11 @@ class Grafo():
 
     def getEdgeWeight(self,edge):
         # print(edge[0].getLabel())
-        return self.edgeWeight.get(edge,-1)
-    
+        return self.edgeWeight.get(edge, math.inf)
+
     def getEdges(self):
         return self.edges
-    
+
     def addNode(self, node: Node):
         self.nodes.append(node)
         # self.nodes.sort()
@@ -64,13 +64,13 @@ class Grafo():
 
     def getNodeAmmt(self):
         return len(self.nodes)
-    
+
     def getEdgeAmmt(self):
         return len(self.edges)//2
 
     def degree(self, node: Node):
         return len(neighbours)
-    
+
     def neighbours(node: Node):
         return node.neighbours
 
@@ -84,10 +84,10 @@ class Grafo():
         f = open(file)
         file_lines = f.read().split("\n")
         #print(file_lines)
-        
+
         split_line = file_lines.pop(0).split(" ")
         nodeAmt = int(split_line[1])
-        
+
         ## Populando Nodos
         for i in range(nodeAmt):
             nodeLabel = ""
@@ -99,8 +99,8 @@ class Grafo():
             if (nodeLabel != ""):
                 self.nodes.append(Node(nodeLabel, int(split_line[0])))
                 # print("Nodo(indice: %d label:%s)" % (i,nodeLabel))
-           
-        
+
+
         split_line = file_lines.pop(0).split(" ")
         for i in range(len(file_lines)-1):
             split_line = file_lines.pop(0).split(" ")
@@ -114,8 +114,8 @@ class Grafo():
             self.addEdge(self.nodes[u], self.nodes[v], w)
             self.addEdge(self.nodes[v], self.nodes[u], w)
             # print("Aresta do nodo %d -> %d com peso %d" % (u,v,w))
-           
-        
+
+
 def BFS(g: Grafo, s: int):
     origin = g.getNodeFromIndex(s)
     # creating map of visited nodes
@@ -126,7 +126,7 @@ def BFS(g: Grafo, s: int):
     for node in g.nodes:
         nodeDistance[node] = math.inf
     nodeAncestor = dict()
-    
+
     nodeVisited[origin] = True
     nodeDistance[origin] = 0
     q = [origin]
@@ -141,11 +141,11 @@ def BFS(g: Grafo, s: int):
                 nodeAncestor[v] = u
                 q.append(v)
 
-    sortedShit = sorted(nodeDistance.items(), key=lambda kv: kv[1])                
+    sortedShit = sorted(nodeDistance.items(), key=lambda kv: kv[1])
     sorted_distances = collections.OrderedDict(sortedShit)
     showOut = ""
     actual = -1
-    for elemt in sorted_distances:     
+    for elemt in sorted_distances:
         if (sorted_distances[elemt] > actual and sorted_distances[elemt] != math.inf):
             actual += 1
             showOut += "\n%d: %d" % (actual, elemt.getIndex())
@@ -157,7 +157,7 @@ def BFS(g: Grafo, s: int):
 def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
     node = g.getNodeFromIndex(s)
     ciclo = [node]
-    
+
     end = node
     while(True):
         selected_edge = 0
@@ -175,7 +175,7 @@ def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
         ciclo.append(node)
         if node == end:
             break
-    
+
     for vertex in ciclo:
         for adjacent_vertex in vertex.getNeighbours():
             if (not visited[(vertex, adjacent_vertex)]):
@@ -220,9 +220,9 @@ def printBell(dist: dict, ancest: dict, node: Node):
         out += ", %s" % ancest[node].getIndex()
         node = ancest[node]
     out+="; d=%.2f" % dist[origin]
-    
+
     return out
-    
+
 
 
 def bellmanFord(g: Grafo, s: int):
@@ -246,7 +246,7 @@ def bellmanFord(g: Grafo, s: int):
             return (False, None, None)
     for node in g.getNodes()[1:]:
         print("%d: %s" % (node.getIndex(), printBell(dist,ancetral, node)))
-        
+
     return (True, dist, ancetral)
 
 
@@ -254,37 +254,37 @@ def floydwarshal(g :Grafo):
     adjMatrix = []
     for vertex in range(g.getNodeAmmt()):
         adjMatrix.append([])
-    
-    for i in range(g.getNodeAmmt()):
-        for j in range(g.getNodeAmmt()):
-            u = g.getNodeFromIndex(i)
-            v = g.getNodeFromIndex(j)
-            if (i == j):
-                adjMatrix[i].append(0)
-            elif ((g.getEdgeWeight((u,v))) == (-1)):
-                adjMatrix[i].append(math.inf)
-                print(adjMatrix[i])
-                print(i)
-            else:
-                adjMatrix[i].append(g.getEdgeWeight((u,v)))
-    
-    for elemt in adjMatrix:
-        print (elemt)
 
-    for k in range(g.getNodeAmmt()):
-        for i in range(g.getNodeAmmt()):
-            for j in range(g.getNodeAmmt()):
-                if adjMatrix[i][j] > (adjMatrix[i][k] + adjMatrix[k][j]):
-                    adjMatrix[i][j] = (adjMatrix[i][k] + adjMatrix[k][j])
-    
+    for i in range(1, g.getNodeAmmt()+1):
+        for j in range(1, g.getNodeAmmt()+1):
+            u = g.getNodeFromIndex(i)
+
+            v = g.getNodeFromIndex(j)
+            # print(str(i)+" "+str(j))
+            # print(str(u)+" "+str(v))
+            if (i == j):
+                adjMatrix[i-1].append(0)
+            elif ((g.getEdgeWeight((u,v))) == (math.inf)):
+                adjMatrix[i-1].append(math.inf)
+                # print(adjMatrix[i])
+                # print(i)
+            else:
+                adjMatrix[i-1].append(g.getEdgeWeight((u,v)))
+
     # for elemt in adjMatrix:
     #     print (elemt)
 
-    return adjMatrix
+    for k in range(1, g.getNodeAmmt()):
+        for i in range(1, g.getNodeAmmt()):
+            for j in range(1, g.getNodeAmmt()):
+                if adjMatrix[i-1][j-1] > (adjMatrix[i-1][k-1] + adjMatrix[k-1][j-1]):
+                    adjMatrix[i-1][j-1] = (adjMatrix[i-1][k-1] + adjMatrix[k-1][j-1])
 
-                
-        
-    
+    # print("\n\n")
+    for elemt in adjMatrix:
+        print (elemt)
+
+    return adjMatrix
 
 def showGraph(grafo):
     for n in grafo.nodes:
@@ -295,11 +295,28 @@ def showGraph(grafo):
 
 def main():
     g = Grafo()
-    g.openFile("Graph/dolphins.net")
-    # BFS(g, 1)
-    # hierholzer(g)
+    g.openFile("Graph/teste1.net")
+    print ("Grafo criado")
+    print ("INICIO BFS")
+
+    BFS(g, 1)
+
+    print ("FIM BFS")
+    print ("INICIO HIERHOLZER")
+
+    hierholzer(g)
+
+    print ("FIM HIERHOLZER")
+    print ("INICIO BELLMANFORD")
+
+    bellmanFord(g, 2)
+
+    print ("FIM BELLMANFORD")
+    print ("INICIO FLOYDWARSHAL")
+
     floydwarshal(g)
-    # bellmanFord(g, 2)
+
+    print ("FIM FLOYDWARSHAL")
     #print(joinCycles(['a','b','c','a'], ['c','e','d','c']))
     #for elemt in path:
     #    print(path[elemt])
@@ -308,9 +325,8 @@ def main():
     #print(g.hasEdge(g.getNodeFromIndex(1), g.getNodeFromIndex(2)))
 
     # showGraph(g)
-    
+
 
 
 if __name__ == "__main__":
     main()
-    
