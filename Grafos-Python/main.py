@@ -137,9 +137,9 @@ def BFS(g: Grafo, s: int):
     for elemt in sorted_distances:
         if (sorted_distances[elemt] > actual and sorted_distances[elemt] != math.inf):
             actual += 1
-            showOut += "\n%d: %d" % (actual, elemt.getIndex())
+            showOut += "\n%d: %s" % (actual, elemt.getLabel())
         else:
-            showOut += ", %d" % elemt.getIndex()
+            showOut += ", %s" % elemt.getLabel()
     showOut = showOut.strip()
     print(showOut)
 
@@ -188,7 +188,7 @@ def hierholzer(g: Grafo):
         print(1)
         out = ""
         for vertex in retorno[1]:
-            out += str(vertex.getIndex()) + ", "
+            out += str(vertex.getLabel()) + ", "
         print(out)
 
 def joinCycles(l1: [], l2: []):
@@ -201,9 +201,9 @@ def joinCycles(l1: [], l2: []):
 
 def printBell(dist: dict, ancest: dict, node: Node):
     origin = node
-    out = "%s" % node.getIndex()
+    out = "%s" % node.getLabel()
     while(ancest[node] != 0):
-        out += ", %s" % ancest[node].getIndex()
+        out += ", %s" % ancest[node].getLabel()
         node = ancest[node]
     out+="; d=%.2f" % dist[origin]
 
