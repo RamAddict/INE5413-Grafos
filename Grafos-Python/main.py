@@ -48,7 +48,6 @@ class Grafo():
         return self.nodes
 
     def getEdgeWeight(self,edge):
-        # print(edge[0].getLabel())
         return self.edgeWeight.get(edge, math.inf)
 
     def getEdges(self):
@@ -56,7 +55,6 @@ class Grafo():
 
     def addNode(self, node: Node):
         self.nodes.append(node)
-        # self.nodes.sort()
 
     def addEdge(self, u, v, w):
         self.edges.add((u,v))
@@ -83,7 +81,6 @@ class Grafo():
     def openFile(self, file):
         f = open(file)
         file_lines = f.read().split("\n")
-        #print(file_lines)
 
         split_line = file_lines.pop(0).split(" ")
         nodeAmt = int(split_line[1])
@@ -92,13 +89,11 @@ class Grafo():
         for i in range(nodeAmt):
             nodeLabel = ""
             split_line = file_lines.pop(0).split(" ")
-            # print(split_line)
             nodeLabel += split_line[1]
             for part in split_line[2:]:
                 nodeLabel += " %s"%part
             if (nodeLabel != ""):
                 self.nodes.append(Node(nodeLabel, int(split_line[0])))
-                # print("Nodo(indice: %d label:%s)" % (i,nodeLabel))
 
 
         split_line = file_lines.pop(0).split(" ")
@@ -107,25 +102,20 @@ class Grafo():
             u = int(split_line[0])-1
             v = int(split_line[1])-1
             w = float(split_line[2])
-            # print("Criando edge %d->%d , w =%d" % (u+1,v+1,w))
             self.nodes[u].addNeighbour(self.nodes[v])
-            #if(!directed):
             self.nodes[v].addNeighbour(self.nodes[u])
             self.addEdge(self.nodes[u], self.nodes[v], w)
             self.addEdge(self.nodes[v], self.nodes[u], w)
-            # print("Aresta do nodo %d -> %d com peso %d" % (u,v,w))
 
 
 def BFS(g: Grafo, s: int):
     origin = g.getNodeFromIndex(s)
-    # creating map of visited nodes
+    nodeAncestor = dict()
+    nodeDistance = dict()
     nodeVisited = dict()
     for node in g.nodes:
         nodeVisited[node] = False
-    nodeDistance = dict()
-    for node in g.nodes:
         nodeDistance[node] = math.inf
-    nodeAncestor = dict()
 
     nodeVisited[origin] = True
     nodeDistance[origin] = 0
@@ -133,7 +123,6 @@ def BFS(g: Grafo, s: int):
 
     while q:
         u = q.pop(0)
-        # print(nodeDistance[u])
         for v in u.getNeighbours():
             if not nodeVisited[v]:
                 nodeVisited[v] = True
@@ -183,12 +172,9 @@ def buscarSubcicloEuleriano(g: Grafo, s: int, visited: dict):
                 if (not retorno[0]):
                     return (False, [])
                 ciclo = joinCycles(ciclo,retorno[1])
-            # retorno[1]. merge cycles, fuck me
     return (True, ciclo)
 
 
-
-#  Grafo direcionado ou não?
 def hierholzer(g: Grafo):
     visited = {}
     for edge in g.edges:
@@ -251,45 +237,33 @@ def bellmanFord(g: Grafo, s: int):
 
 
 def floydwarshal(g :Grafo):
-    adjMatrix = []
+    distances = []
     for vertex in range(g.getNodeAmmt()):
-        adjMatrix.append([])
+        distances.append([])
 
-    for i in range(1, g.getNodeAmmt()+1):
-        for j in range(1, g.getNodeAmmt()+1):
+    for i in range(g.getNodeAmmt()):
+        for j in range(g.getNodeAmmt()):
             u = g.getNodeFromIndex(i)
-
             v = g.getNodeFromIndex(j)
-            # print(str(i)+" "+str(j))
-            # print(str(u)+" "+str(v))
-            if (i == j):
-                adjMatrix[i-1].append(0)
-            elif ((g.getEdgeWeight((u,v))) == (math.inf)):
-                adjMatrix[i-1].append(math.inf)
-                # print(adjMatrix[i])
-                # print(i)
-            else:
-                adjMatrix[i-1].append(g.getEdgeWeight((u,v)))
-
-    # for elemt in adjMatrix:
-    #     print (elemt)
+            distances[i].append(0) if (i == j) else distances[i].append(g.getEdgeWeight((u,v)))
+                
 
     for k in range(g.getNodeAmmt()):
         for i in range(g.getNodeAmmt()):
             for j in range(g.getNodeAmmt()):
-                adjMatrix[i][j] = min(adjMatrix[i][j], (adjMatrix[i][k] + adjMatrix[k][j]))
+                distances[i][j] = min(distances[i][j], (distances[i][k] + distances[k][j]))
 
     out = ""
-    for i in range(len(adjMatrix)):
+    for i in range(len(distances)):
         out += "%d:" % (i+1)
-        for element in adjMatrix[i]:
+        for element in distances[i]:
             out += "%.1f, " % element
         out = out[:-2]
         out += "\n"
     print(out)
     
 
-    return adjMatrix
+    return distances
 
 def showGraph(grafo):
     for n in grafo.nodes:
@@ -311,6 +285,7 @@ def main():
     except:
         print("Arquivo do grafo %s não foi encontrado." % fileName)
         return 0
+
     print ("Grafo criado")
     print ("INICIO BFS")
 
@@ -332,13 +307,6 @@ def main():
     floydwarshal(g)
 
     print ("FIM FLOYDWARSHAL")
-
-    #print(joinCycles(['a','b','c','a'], ['c','e','d','c']))
-    #for elemt in path:
-    #    print(path[elemt])
-    # n tem nodo 0 é pq existe de 1 -> 3 é, mas tem indice 0 no array de nodos
-
-    #print(g.hasEdge(g.getNodeFromIndex(1), g.getNodeFromIndex(2)))
 
     # showGraph(g)
 
