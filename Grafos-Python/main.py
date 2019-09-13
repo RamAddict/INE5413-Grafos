@@ -277,14 +277,17 @@ def main():
     print ("Os arquivos de grafos disponíveis são:")
     os.system("ls Graph")
     fileName = input("Insira nome do arquivo do grafo a ser aberto:")
-    fileName = (fileName+".net")  if fileName[-3:] != ".net"  else fileName
-    print("Abrindo grafo: %s" % (fileName[:-3]))
+    fileName = (fileName+".net")  if fileName[-4:] != ".net"  else fileName
+    print("Abrindo grafo: %s" % (fileName[:-4]))
     
     try:
         g.openFile("Graph/%s" % fileName)
     except:
-        print("Arquivo do grafo %s não foi encontrado." % fileName)
-        return 0
+        try:
+            g.openFile(fileName)
+        except:
+            print("Arquivo não encontrado.")
+            return 0
 
     print ("Grafo criado")
     print ("INICIO BFS")
@@ -299,7 +302,7 @@ def main():
     print ("FIM HIERHOLZER")
     print ("INICIO BELLMANFORD")
 
-    bellmanFord(g, 5)
+    bellmanFord(g, 1)
 
     print ("FIM BELLMANFORD")
     print ("INICIO FLOYDWARSHAL")
