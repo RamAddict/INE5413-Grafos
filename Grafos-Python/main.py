@@ -130,8 +130,8 @@ def BFS(g: Grafo, s: int):
                 nodeAncestor[v] = u
                 q.append(v)
 
-    sortedShit = sorted(nodeDistance.items(), key=lambda kv: kv[1])
-    sorted_distances = collections.OrderedDict(sortedShit)
+    sortedOp = sorted(nodeDistance.items(), key=lambda kv: kv[1])
+    sorted_distances = collections.OrderedDict(sortedOp)
     showOut = ""
     actual = -1
     for elemt in sorted_distances:
@@ -221,7 +221,7 @@ def bellmanFord(g: Grafo, s: int):
         ancetral[n] = 0
     dist[origin] = 0
 
-    for i in g.nodes[1:g.getNodeAmmt()-1]:
+    for i in g.getNodes()[:-1]:
         for edge in g.getEdges():
             if (dist[edge[1]] > dist[edge[0]] + g.edgeWeight[edge]):
                 dist[edge[1]] = dist[edge[0]] + g.edgeWeight[edge]
@@ -230,7 +230,7 @@ def bellmanFord(g: Grafo, s: int):
     for edge in g.getEdges():
         if (dist[edge[1]] > dist[edge[0]] + g.edgeWeight[edge]):
             return (False, None, None)
-    for node in g.getNodes()[1:]:
+    for node in g.getNodes():
         print("%d: %s" % (node.getIndex(), printBell(dist,ancetral, node)))
 
     return (True, dist, ancetral)
@@ -299,7 +299,7 @@ def main():
     print ("FIM HIERHOLZER")
     print ("INICIO BELLMANFORD")
 
-    bellmanFord(g, 2)
+    bellmanFord(g, 5)
 
     print ("FIM BELLMANFORD")
     print ("INICIO FLOYDWARSHAL")
@@ -307,9 +307,6 @@ def main():
     floydwarshal(g)
 
     print ("FIM FLOYDWARSHAL")
-
-    # showGraph(g)
-
 
 
 if __name__ == "__main__":
