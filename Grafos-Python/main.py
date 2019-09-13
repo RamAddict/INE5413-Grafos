@@ -274,15 +274,20 @@ def floydwarshal(g :Grafo):
     # for elemt in adjMatrix:
     #     print (elemt)
 
-    for k in range(1, g.getNodeAmmt()):
-        for i in range(1, g.getNodeAmmt()):
-            for j in range(1, g.getNodeAmmt()):
-                if adjMatrix[i-1][j-1] > (adjMatrix[i-1][k-1] + adjMatrix[k-1][j-1]):
-                    adjMatrix[i-1][j-1] = (adjMatrix[i-1][k-1] + adjMatrix[k-1][j-1])
+    for k in range(g.getNodeAmmt()):
+        for i in range(g.getNodeAmmt()):
+            for j in range(g.getNodeAmmt()):
+                adjMatrix[i][j] = min(adjMatrix[i][j], (adjMatrix[i][k] + adjMatrix[k][j]))
 
-    # print("\n\n")
-    for elemt in adjMatrix:
-        print (elemt)
+    out = ""
+    for i in range(len(adjMatrix)):
+        out += "%d:" % (i+1)
+        for element in adjMatrix[i]:
+            out += "%.1f, " % element
+        out = out[:-2]
+        out += "\n"
+    print(out)
+    
 
     return adjMatrix
 
@@ -295,7 +300,17 @@ def showGraph(grafo):
 
 def main():
     g = Grafo()
-    g.openFile("Graph/teste1.net")
+    print ("Os arquivos de grafos disponíveis são:")
+    os.system("ls Graph")
+    fileName = input("Insira nome do arquivo do grafo a ser aberto:")
+    fileName = (fileName+".net")  if fileName[-3:] != ".net"  else fileName
+    print("Abrindo grafo: %s" % (fileName[:-3]))
+    
+    try:
+        g.openFile("Graph/%s" % fileName)
+    except:
+        print("Arquivo do grafo %s não foi encontrado." % fileName)
+        return 0
     print ("Grafo criado")
     print ("INICIO BFS")
 
@@ -317,6 +332,7 @@ def main():
     floydwarshal(g)
 
     print ("FIM FLOYDWARSHAL")
+
     #print(joinCycles(['a','b','c','a'], ['c','e','d','c']))
     #for elemt in path:
     #    print(path[elemt])
