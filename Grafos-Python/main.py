@@ -43,6 +43,29 @@ class Grafo():
         self.nodes = []
         self.edges = set()
         self.edgeWeight = dict()
+        self.ponderado = False
+        self.dirigido = False
+
+    def setNodes(self, nodeList: [Node]):
+        self.nodes = nodeList
+
+    def setEdges(self, edgeList: set):
+        self.edges = edgeList
+
+    def setEdgeWeight(self, edgeWeights: dict):
+        self.edgeWeight = edgeWeights
+
+    def setDirigido(self, dir):
+        self.dirigido = dir
+
+    def setPonderado(self, pon):
+        self.ponderado = pon
+
+    def getDirigido(self):
+        return self.dirigido
+
+    def getPonderado(self):
+        return self.ponderado
 
     def getNodes(self):
         return self.nodes
@@ -79,6 +102,7 @@ class Grafo():
         return self.nodes[idx-1]
 
     def openFile(self, file):
+        ponderado = False
         f = open(file)
         file_lines = f.read().split("\n")
 
@@ -95,18 +119,27 @@ class Grafo():
             if (nodeLabel != ""):
                 self.nodes.append(Node(nodeLabel, int(split_line[0])))
 
-
+        # Populando edges
         split_line = file_lines.pop(0).split(" ")
+        
+        self.dirigido = True if (split_line[0] != "*edges") else False
         for i in range(len(file_lines)-1):
             split_line = file_lines.pop(0).split(" ")
             u = int(split_line[0])-1
             v = int(split_line[1])-1
             w = float(split_line[2])
+            if (w != 1):
+                self.ponderado = True
             self.nodes[u].addNeighbour(self.nodes[v])
-            self.nodes[v].addNeighbour(self.nodes[u])
             self.addEdge(self.nodes[u], self.nodes[v], w)
-            self.addEdge(self.nodes[v], self.nodes[u], w)
-
+            
+            print(self.nodes[u].getLabel())
+            if (not self.dirigido):
+                self.nodes[v].addNeighbour(self.nodes[u])
+                self.addEdge(self.nodes[v], self.nodes[u], w)
+        print(self.dirigido)
+        print(self.ponderado)
+            
 
 def BFS(g: Grafo, s: int):
     origin = g.getNodeFromIndex(s)
@@ -271,6 +304,24 @@ def showGraph(grafo):
     for e in grafo.edges:
        print("%d->%d w = %d" % (e[0].getIndex(), e[1].getIndex(), grafo.edgeWeight.get((e[0],e[1]))))
 
+def transposeGraph(grafo: Grafo):
+    new_edges = []
+    new_weights = dict()
+    
+    for edge in grafo.getEdges():
+        transposed_edge = (edge[1], edge[0])
+        new_edges.append(transposed_edge)
+        new_weights[transposed_edge] = grafo.getEdgeWeight(edge)
+
+    transposed_graph = Grafo()
+    transposed_graph.setEdges(new_edges)
+    transposed_graph.setEdgeWeight(new_weights)
+    transposed_graph.setNodes(grafo.getNodes())
+    transposed_graph.setDirigido(grafo.getDirigido())
+    transposed_graph.setPonderado(grafo.getPonderado())
+
+    return transposed_graph
+
 
 def main():
     g = Grafo()
@@ -289,28 +340,40 @@ def main():
             print("Arquivo não encontrado.")
             return 0
 
-    print ("Grafo criado")
-    print ("INICIO BFS")
+    # print ("Grafo criado")
+    # print ("INICIO BFS")
 
-    BFS(g, 1)
+    # BFS(g, 1)
 
-    print ("FIM BFS")
-    print ("INICIO HIERHOLZER")
+    # print ("FIM BFS")
+    # print ("INICIO HIERHOLZER")
 
-    hierholzer(g)
+    # hierholzer(g)
 
-    print ("FIM HIERHOLZER")
-    print ("INICIO BELLMANFORD")
+    # print ("FIM HIERHOLZER")
+    # print ("INICIO BELLMANFORD")
 
-    bellmanFord(g, 1)
+    # bellmanFord(g, 1)
 
-    print ("FIM BELLMANFORD")
-    print ("INICIO FLOYDWARSHAL")
+    # print ("FIM BELLMANFORD")
+    # print ("INICIO FLOYDWARSHAL")
 
-    floydwarshal(g)
+    # floydwarshal(g)
 
-    print ("FIM FLOYDWARSHAL")
+    # print ("FIM FLOYDWARSHAL")
+    print ('=============================')
 
+    gT = transposeGraph(g)
+    # for node in g.getNodes():
+    #     print(node)
+
+    # print(len(g.getEdges()))
+    # print(len(g.getNodes()))
+    for edge in gT.getEdges():
+        print("{} -> {}, {}".format(edge[0].getLabel(), edge[1].getLabel(), gT.getEdgeWeight(edge)))
+
+    # for node in g.getNodes():
+    #     print(node.getLabel())
 
 if __name__ == "__main__":
     main()
