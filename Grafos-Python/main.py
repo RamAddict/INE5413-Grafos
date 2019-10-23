@@ -37,6 +37,9 @@ class Node():
 
     def getNeighbours(self):
         return self.neighbours
+   
+    def __repr__(self):
+        return self.label
 
 class Grafo():
     def __init__(self):
@@ -133,12 +136,9 @@ class Grafo():
             self.nodes[u].addNeighbour(self.nodes[v])
             self.addEdge(self.nodes[u], self.nodes[v], w)
             
-            print(self.nodes[u].getLabel())
             if (not self.dirigido):
                 self.nodes[v].addNeighbour(self.nodes[u])
                 self.addEdge(self.nodes[v], self.nodes[u], w)
-        print(self.dirigido)
-        print(self.ponderado)
             
 
 def BFS(g: Grafo, s: int):
@@ -322,6 +322,75 @@ def transposeGraph(grafo: Grafo):
 
     return transposed_graph
 
+def DFSVisit(grafo, origem: Node, visitados, inicio, ancestral, fim, tempo):
+    visitados[origem] = True
+    tempo = tempo+1
+    inicio[origem] = tempo
+    for node in origem.getNeighbours():
+        if not visitados[node]:
+            ancestral[node] = origem
+            DFSVisit(grafo, node, visitados, inicio, ancestral, fim, tempo)
+    tempo = tempo + 1
+    fim[origem] = tempo
+
+# igual ao DFS mas o for é feito em ordem decrescente de fim
+def DFSAdaptado(grafo):
+    visitados = dict()
+    inicio = dict()
+    fim = dict()
+    ancestral = dict()
+
+    for n in grafo.getNodes():
+        visitados[n] = False
+        inicio[n] = math.inf
+        fim[n] = math.inf
+        ancestral[n] = False
+
+    tempo = 0
+    sortedOp = sorted(fim.items(), key=lambda kv: kv[1], reverse=True)
+    sortedFim = collections.OrderedDict(sortedOp)
+    for node in sortedFim:
+        # print((node.getIndex(), fim[node]))
+        if not visitados[node]:
+            DFSVisit(grafo, node, visitados, inicio, ancestral, fim, tempo)
+
+    return (visitados, inicio, ancestral, fim)
+
+
+def kosaraju(grafo: Grafo):
+    retornos = DFS(grafo)
+    for i in retornos[3].keys():
+        print(i.getLabel())
+    for i in retornos[3].values():
+        print(i)
+    grafoT = transposeGraph(grafo)
+
+    retornosT = DFSAdaptado(grafoT)
+    # print(retornosT)
+    # print(retornosT[1]) if retornosT[0] else print("erro em components")
+
+def DFS(grafo):
+    visitados = dict()
+    inicio = dict()
+    fim = dict()
+    ancestral = dict()
+
+    for n in grafo.getNodes():
+        visitados[n] = False
+        inicio[n] = math.inf
+        fim[n] = math.inf
+        ancestral[n] = False
+
+    tempo = 0
+
+    for node in grafo.getNodes():
+        if not visitados[node]:
+            DFSVisit(grafo, node, visitados, inicio, ancestral, fim, tempo)
+
+    print(fim.values())
+    print(inicio.values())
+    return (visitados, inicio, ancestral, fim)
+
 
 def main():
     g = Grafo()
@@ -361,16 +430,22 @@ def main():
     # floydwarshal(g)
 
     # print ("FIM FLOYDWARSHAL")
-    print ('=============================')
+    # print ('=============================')
 
-    gT = transposeGraph(g)
+    # kosaraju(g)
+    DFS(g)
+
+    # print(g.getNodeFromIndex(1))
+    # gT = transposeGraph(g)
     # for node in g.getNodes():
     #     print(node)
 
     # print(len(g.getEdges()))
     # print(len(g.getNodes()))
-    for edge in gT.getEdges():
-        print("{} -> {}, {}".format(edge[0].getLabel(), edge[1].getLabel(), gT.getEdgeWeight(edge)))
+    # for edge in gT.getEdges():
+    #     print("{} -> {}, {}".format(edge[0].getLabel(), edge[1].getLabel(), gT.getEdgeWeight(edge)))
+
+
 
     # for node in g.getNodes():
     #     print(node.getLabel())
