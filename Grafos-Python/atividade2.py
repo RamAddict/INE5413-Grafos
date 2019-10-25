@@ -139,13 +139,19 @@ def kruskal(grafo):
         nodeIndex2 = key[1].getIndex() - 1
 
         if not S[nodeIndex1] == S[nodeIndex2]:
-            Arvore.append((key[0].getLabel(), key[1].getLabel()))
+            Arvore.append((key[0], key[1]))
             x = S[nodeIndex1] + S[nodeIndex2]
             # print(x)
             for w in x:
                 S[w] = x
-                
-    print(Arvore)
+    
+    somatorio = 0
+    output = ""
+    for edge in Arvore:
+        somatorio += grafo.getEdgeWeight(edge)
+        output += "{}-{}, ".format(edge[0].getLabel(),edge[1].getLabel())
+    print(somatorio)
+    print(output[:-2])
 
 def main():
     g = Grafo()
