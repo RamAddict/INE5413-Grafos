@@ -123,32 +123,33 @@ class Grafo():
                 return 0
 
         file_lines = f.read().split("\n")
-
         split_line = file_lines.pop(0).split(" ")
         nodeAmt = int(split_line[1])
 
+        split_line = file_lines.pop(0).split(" ")
         ## Populando Nodos
-        for i in range(nodeAmt):
+        while(not split_line[0][0] == '*'):
             nodeLabel = ""
-            split_line = file_lines.pop(0).split(" ")
             nodeLabel += split_line[1]
             for part in split_line[2:]:
                 nodeLabel += " %s"%part
             if (nodeLabel != ""):
                 self.nodes.append(Node(nodeLabel, int(split_line[0])))
+            split_line = file_lines.pop(0).split(" ")
 
         # Populando edges
-        split_line = file_lines.pop(0).split(" ")
-        
         self.dirigido = True if (split_line[0] != "*edges") else False
-        for i in range(len(file_lines)-1):
-            split_line = file_lines.pop(0).split(" ")
+        split_line = file_lines.pop(0).split(" ")
+        while(not split_line[0] == ""):
             u = int(split_line[0])-1
             v = int(split_line[1])-1
             w = float(split_line[2])
             self.nodes[u].addNeighbour(self.nodes[v])
             self.addEdge(self.nodes[u], self.nodes[v], w)
-            
+            if file_lines:
+                split_line = file_lines.pop(0).split(" ")
+            else:
+                break
             if (not self.dirigido):
                 self.nodes[v].addNeighbour(self.nodes[u])
                 self.addEdge(self.nodes[v], self.nodes[u], w)
