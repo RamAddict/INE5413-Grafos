@@ -3,6 +3,9 @@
 2 Cavalo
 3 Qualquer coisa com espaço
 4 arm
+5 hand
+6 finger
 *arcs
 1 2 5
 2 3 6
+5 6 1
