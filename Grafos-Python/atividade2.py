@@ -83,9 +83,11 @@ def kahn(grafo):
 
 def kruskal(grafo):
     Arvore = []
-    S = []
+    setList = []
     for node in grafo.getNodes():
-        S.append([node.getIndex() - 1])
+        S = set()
+        S.add(node.getIndex() - 1)
+        setList.append(S)
 
     sortedOp = sorted(grafo.getEdgeWeights().items(), key=lambda kv: kv[1])
     novoE = collections.OrderedDict(sortedOp)
@@ -93,13 +95,12 @@ def kruskal(grafo):
         nodeIndex1 = key[0].getIndex() - 1
         nodeIndex2 = key[1].getIndex() - 1
 
-        if not S[nodeIndex1] == S[nodeIndex2]:
+        if setList[nodeIndex1].isdisjoint(setList[nodeIndex2]):
             Arvore.append((key[0], key[1]))
-            x = S[nodeIndex1] + S[nodeIndex2]
-            # print(x)
-            for w in x:
-                S[w] = x
-    
+            union = setList[nodeIndex1].union(setList[nodeIndex2])
+            setList[nodeIndex1] = union
+            setList[nodeIndex2] = union
+
     somatorio = 0
     output = ""
     for edge in Arvore:
