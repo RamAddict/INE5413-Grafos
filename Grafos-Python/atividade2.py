@@ -1,53 +1,37 @@
 from graph import *
 
-tempo = 0
-
-def transposeGraph(grafo: Grafo):
-    new_edges = []
-    new_weights = dict()
-    
-    for edge in grafo.getEdges():
-        transposed_edge = (edge[1], edge[0])
-        new_edges.append(transposed_edge)
-        new_weights[transposed_edge] = grafo.getEdgeWeight(edge)
-
-    transposed_graph = Grafo()
-    transposed_graph.setEdges(new_edges)
-    transposed_graph.setEdgeWeight(new_weights)
-    transposed_graph.setNodes(grafo.getNodes())
-    transposed_graph.setDirigido(grafo.getDirigido())
-    transposed_graph.setPonderado(grafo.getPonderado())
-
-    return transposed_graph
-
-def kosaraju(grafo: Grafo):
+def kosaraju(grafoN: Grafo):
     tempo = 0
     inicio = dict()
-    finishing_times = None
     fim = dict()
     ancestral = dict()
     visitados = dict()
-    pilha = list()
+
+    for n in grafoN.getNodes():
+        visitados[n] = False
+        inicio[n] = math.inf
+        fim[n] = math.inf
+        ancestral[n] = False
   
-
-    def DFS(grafo):
+    def DFS(grafo: Grafo):
         nonlocal tempo, visitados, fim, ancestral, inicio
-
+        
+        sortedOp = sorted(fim.items(), key=lambda kv: kv[1], reverse = True)
+        novoE = collections.OrderedDict(sortedOp)
+        tempo = 0
         for n in grafo.getNodes():
             visitados[n] = False
             inicio[n] = math.inf
             fim[n] = math.inf
             ancestral[n] = False
-
-        sortedOp = sorted(fim.items(), key=lambda kv: kv[1], reverse = True)
-        novoE = collections.OrderedDict(sortedOp)
         
         for node in novoE.keys():
             if not visitados[node]:
                 DFSVisit(grafo, node)
+        return (visitados, inicio, ancestral, fim)
     
-    def DFSVisit(grafo, origem: Node):
-        nonlocal tempo, inicio, fim, ancestral, visitados, pilha
+    def DFSVisit(grafo: Grafo, origem: Node):
+        nonlocal tempo, inicio, fim, ancestral, visitados
         visitados[origem] = True
         tempo = tempo+1
         inicio[origem] = tempo
@@ -55,50 +39,25 @@ def kosaraju(grafo: Grafo):
             if not visitados[node]:
                 ancestral[node] = origem
                 DFSVisit(grafo, node)
-        pilha.insert(0, origem)
         tempo = tempo + 1
         fim[origem] = tempo
     
-    def DFSPrint(grafo, origem: Node):
-        nonlocal tempo, inicio, fim, ancestral, visitados
-        visitados[origem] = True
-        print(origem.getLabel(), end='')
-        for node in origem.getNeighbours():
-            if not visitados[node]:
-                DFSPrint(grafo, node)
+    retorno = DFS(grafoN)
 
-    for n in grafo.getNodes():
-        visitados[n] = False
-        inicio[n] = math.inf
-        fim[n] = math.inf
-        ancestral[n] = False
+    grafoT = transposeGraph(grafoN)
+    retornoT = DFS(grafoT)
+    ancestralT = retornoT[2]
 
-    tempo = 0
-    grafoT = transposeGraph(grafo)
+    def printAncestors(nodo : Node, ancestrais: dict):
+            for key,value in ancestrais.items():
+                if value == nodo:
+                    return ", {}{}".format(key.getLabel(), printAncestors(key, ancestrais))
+            return ""
 
-    for n in grafo.getNodes():
-        visitados[n] = False
-        inicio[n] = math.inf
-        fim[n] = math.inf
-        ancestral[n] = False
-    
-    print (pilha)
-
-    while pilha:
-        atual = pilha.pop(0)
-        if not visitados[atual]:
-            DFSPrint(grafoT, atual)
-            print("\n")
-    # out = ""
-    # for node,value in ancestral.items():
-    #     if(not value):
-    #         out += "\n{}".format(node.getLabel())
-    #         for node1, value1 in ancestral.items():
-    #             if(value1 == node):
-    #                 out += ", {}".format(node1.getLabel())
-    #                 node = node1
-    #                 value = value1
-    
+    for item in ancestralT.items():
+        if item[1] == False:
+            print("{}{}".format(item[0].getLabel(), printAncestors(item[0],ancestralT)))
+            
 def kahn(grafo):
     ordenados = []
     nodos_sem_entrada = []
@@ -155,17 +114,19 @@ def kruskal(grafo):
 
 def main():
     g = Grafo()
-    g.openFile()
 
     print ("INICIO KOSARAJU (CFC)")
+    g.openFile()
     kosaraju(g)
     print ('=============================')
 
     print ("INICIO KAHN (ORDENAÇÃO TOPOLÓGICA)")
+    g.openFile()
     kahn(g)
     print ('=============================')
 
     print ("INICIO KRUSKAL")
+    g.openFile()
     kruskal(g)
     print ('=============================')
 

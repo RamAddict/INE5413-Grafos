@@ -3,6 +3,7 @@ import collections
 import heapq
 import os
 import random
+
 class Node():
     def __init__(self, label, index):
         self.label = label
@@ -34,6 +35,9 @@ class Node():
     def addNeighbour(self, node):
         self.neighbours.add(node)
 
+    def clearNeighbour(self):
+        self.neighbours = set()
+
     def getNeighbours(self):
         return self.neighbours
    
@@ -45,7 +49,6 @@ class Grafo():
         self.nodes = []
         self.edges = set()
         self.edgeWeight = dict()
-        self.ponderado = False
         self.dirigido = False
 
     def setNodes(self, nodeList: [Node]):
@@ -92,7 +95,8 @@ class Grafo():
         return len(self.nodes)
 
     def getEdgeAmmt(self):
-        return len(self.edges)//2
+
+        return len(self.edges) if dirigido else len(self.edges)//2
 
     def degree(self, node: Node):
         return len(neighbours)
@@ -107,7 +111,11 @@ class Grafo():
         return self.nodes[idx-1]
 
     def openFile(self):
-        print ("Os arquivos de grafos disponíveis são:")
+        self.nodes = []
+        self.edges = set()
+        self.edgeWeight = dict()
+        self.dirigido = False
+        print ("Escolha o grafo a ser aberto.\nOs arquivos de grafos disponíveis são:")
         os.system("ls Graph")
         fileName = input("Insira nome do arquivo do grafo a ser aberto:")
         fileName = (fileName+".net")  if fileName[-4:] != ".net"  else fileName
@@ -153,3 +161,26 @@ class Grafo():
             if (not self.dirigido):
                 self.nodes[v].addNeighbour(self.nodes[u])
                 self.addEdge(self.nodes[v], self.nodes[u], w)
+
+    
+def transposeGraph(grafo: Grafo):
+    new_edges = []
+    new_weights = dict()
+
+    for source,target in grafo.getEdges():
+        transposed_edge = (target, source)
+        new_edges.append(transposed_edge)
+        new_weights[transposed_edge] = grafo.getEdgeWeight((source,target))
+    
+    transposed_graph = Grafo()
+    transposed_graph.setEdges(new_edges)
+    transposed_graph.setEdgeWeight(new_weights)
+    transposed_graph.setNodes(grafo.getNodes())
+    transposed_graph.setDirigido(grafo.getDirigido())
+    
+    for node in transposed_graph.getNodes():
+        node.clearNeighbour()
+    for source,target in grafo.getEdges():
+        transposed_graph.getNodeFromIndex(target.getIndex()).addNeighbour(source)
+    
+    return transposed_graph
