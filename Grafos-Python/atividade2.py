@@ -1,30 +1,22 @@
 from graph import *
 
 def kosaraju(grafoN: Grafo):
-    tempo = 0
-    inicio = dict()
-    fim = dict()
-    ancestral = dict()
-    visitados = dict()
-
-    for n in grafoN.getNodes():
-        visitados[n] = False
-        inicio[n] = math.inf
-        fim[n] = math.inf
-        ancestral[n] = False
-  
-    def DFS(grafo: Grafo):
+    def inicializar():
         nonlocal tempo, visitados, fim, ancestral, inicio
-        
-        sortedOp = sorted(fim.items(), key=lambda kv: kv[1], reverse = True)
-        novoE = collections.OrderedDict(sortedOp)
         tempo = 0
-        for n in grafo.getNodes():
+        for n in grafoN.getNodes():
             visitados[n] = False
             inicio[n] = math.inf
             fim[n] = math.inf
             ancestral[n] = False
-        
+
+  
+    def DFS(grafo: Grafo):
+        nonlocal tempo, visitados, fim, ancestral, inicio
+        sortedOp = sorted(fim.items(), key=lambda kv: kv[1], reverse = True)
+        novoE = collections.OrderedDict(sortedOp)
+
+        inicializar()
         for node in novoE.keys():
             if not visitados[node]:
                 DFSVisit(grafo, node)
@@ -42,20 +34,24 @@ def kosaraju(grafoN: Grafo):
         tempo = tempo + 1
         fim[origem] = tempo
     
-    retorno = DFS(grafoN)
-
-    grafoT = transposeGraph(grafoN)
-    retornoT = DFS(grafoT)
-    ancestralT = retornoT[2]
-
     def printAncestors(nodo : Node, ancestrais: dict):
             for key,value in ancestrais.items():
                 if value == nodo:
                     return ", {}{}".format(key.getLabel(), printAncestors(key, ancestrais))
             return ""
+    
+    inicio = dict()
+    fim = dict()
+    ancestral = dict()
+    visitados = dict()
+    tempo = 0
+    inicializar()
+
+    DFS(grafoN)
+    ancestralT = DFS(transposeGraph(grafoN))[2]
 
     for item in ancestralT.items():
-        if item[1] == False:
+        if not item[1]:
             print("{}{}".format(item[0].getLabel(), printAncestors(item[0],ancestralT)))
             
 def kahn(grafo):
@@ -117,16 +113,19 @@ def main():
 
     print ("INICIO KOSARAJU (CFC)")
     g.openFile()
+    print("RESULTADO DO ALGORITMO:")
     kosaraju(g)
     print ('=============================')
 
     print ("INICIO KAHN (ORDENAÇÃO TOPOLÓGICA)")
     g.openFile()
+    print("RESULTADO DO ALGORITMO:")
     kahn(g)
     print ('=============================')
 
     print ("INICIO KRUSKAL")
     g.openFile()
+    print("RESULTADO DO ALGORITMO:")
     kruskal(g)
     print ('=============================')
 

@@ -1,8 +1,6 @@
 import math
 import collections
-import heapq
 import os
-import random
 
 class Node():
     def __init__(self, label, index):
