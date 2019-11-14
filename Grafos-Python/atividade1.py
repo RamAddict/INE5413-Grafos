@@ -166,7 +166,7 @@ def showGraph(grafo):
 
 def main():
     g = Grafo()
-    g.openFile()
+    g.openFileNet()
 
     print ("Grafo criado")
     print ("INICIO BFS")

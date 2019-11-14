@@ -113,19 +113,19 @@ def main():
     g = Grafo()
 
     print ("INICIO KOSARAJU (CFC)")
-    g.openFile()
+    g.openFileNet()
     print("RESULTADO DO ALGORITMO:")
     kosaraju(g)
     print ('=============================')
 
     print ("INICIO KAHN (ORDENAÇÃO TOPOLÓGICA)")
-    g.openFile()
+    g.openFileNet()
     print("RESULTADO DO ALGORITMO:")
     kahn(g)
     print ('=============================')
 
     print ("INICIO KRUSKAL")
-    g.openFile()
+    g.openFileNet()
     print("RESULTADO DO ALGORITMO:")
     kruskal(g)
     print ('=============================')

@@ -48,6 +48,20 @@ class Grafo():
         self.edges = set()
         self.edgeWeight = dict()
         self.dirigido = False
+        self.source = None
+        self.target = None
+    
+    def setSource(self, node):
+        self.ponderado = node
+
+    def getSource(self):
+        return self.source
+
+    def setTarget(self, node):
+        self.target = node
+
+    def getTarget(self):
+        return self.target
 
     def setNodes(self, nodeList: [Node]):
         self.nodes = nodeList
@@ -93,11 +107,10 @@ class Grafo():
         return len(self.nodes)
 
     def getEdgeAmmt(self):
-
-        return len(self.edges) if dirigido else len(self.edges)//2
+        return len(self.edges) if self.dirigido else len(self.edges)//2
 
     def degree(self, node: Node):
-        return len(neighbours)
+        return len(node.neighbours)
 
     def neighbours(self, node: Node):
         return node.neighbours
@@ -108,7 +121,7 @@ class Grafo():
     def getNodeFromIndex(self, idx):
         return self.nodes[idx-1]
 
-    def openFile(self):
+    def openFileNet(self):
         self.nodes = []
         self.edges = set()
         self.edgeWeight = dict()
@@ -130,7 +143,7 @@ class Grafo():
 
         file_lines = f.read().split("\n")
         split_line = file_lines.pop(0).split(" ")
-        nodeAmt = int(split_line[1])
+        # nodeAmt = int(split_line[1])
 
         split_line = file_lines.pop(0).split(" ")
         ## Populando Nodos
@@ -160,6 +173,43 @@ class Grafo():
                 self.nodes[v].addNeighbour(self.nodes[u])
                 self.addEdge(self.nodes[v], self.nodes[u], w)
 
+    def openFileGr(self):
+        self.nodes = []
+        self.edges = set()
+        self.edgeWeight = dict()
+        self.dirigido = False
+        print ("Escolha o grafo a ser aberto.\nOs arquivos de grafos disponíveis são:")
+        os.system("ls Graph")
+        fileName = input("Insira nome do arquivo do grafo a ser aberto:")
+        fileName = (fileName+".gr")  if fileName[-3:] != ".gr"  else fileName
+        print("Abrindo grafo: %s\n" % (fileName[:-3]))
+        
+        try:
+            f = open("Graph/%s" % fileName)
+        except:
+            try:
+                f = open(fileName)
+            except OSError as e:
+                print(e)
+                return 0
+
+        file_lines = f.read().split("\n")
+        split_line = file_lines.pop(0).split(" ")
+        # nodeAmt = int(split_line[1])
+
+        split_line = file_lines.pop(0).split(" ")
+        print(split_line)
+        while(split_line[0] != 'a' and split_line[0] != 'e'):
+            split_line = file_lines.pop(0).split(" ")
+        self.dirigido = split_line[0] == 'a'
+        # u = int(split_line[1])
+        print(split_line)
+        # self.source = 
+        while(not split_line[0] = ""):
+
+
+
+        
     
 def transposeGraph(grafo: Grafo):
     new_edges = []
