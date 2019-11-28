@@ -40,14 +40,17 @@ class Node():
         return self.neighbours
    
     def __repr__(self):
-        return self.label
+        return str(self.label)
 
 class Grafo():
     def __init__(self):
         self.nodes = [None]*5000
+        self.partition1 = [None]*2500
+        self.partition2 = [None]*2500
         self.edges = set()
         self.edgeWeight = dict()
         self.dirigido = False
+        self.bipartido = False
         self.source = None
         self.target = None
     
@@ -59,6 +62,9 @@ class Grafo():
 
     def setTarget(self, node):
         self.target = node
+
+    def setBipartido(self):
+        self.bipartido = True
 
     def getTarget(self):
         return self.target
@@ -99,8 +105,15 @@ class Grafo():
     def addNode(self, node: Node):
         if(self.nodes[node.getIndex()] == None):
             self.nodes.insert(node.getIndex(),node)
-
-
+    
+    def addToPartition1(self, node: Node):
+        if(self.partition1[node.getIndex()] == None):
+                self.partition1.insert(node.getIndex(),node)
+    
+    def addToPartition2(self, node: Node):
+        if(self.partition2[node.getIndex()] == None):
+                self.partition2.insert(node.getIndex(),node)
+    
     def addEdge(self, u, v, w):
         self.edges.add((u,v))
         self.edgeWeight[(u,v)] = w
@@ -124,10 +137,6 @@ class Grafo():
         return self.nodes[idx-1]
 
     def openFileNet(self):
-        self.nodes = []
-        self.edges = set()
-        self.edgeWeight = dict()
-        self.dirigido = False
         print ("Escolha o grafo a ser aberto.\nOs arquivos de grafos disponíveis são:")
         os.system("ls Graph")
         fileName = input("Insira nome do arquivo do grafo a ser aberto:")
@@ -176,7 +185,6 @@ class Grafo():
                 self.addEdge(self.nodes[v], self.nodes[u], w)
 
     def openFileGr(self):
-        self.dirigido = False
         print ("Escolha o grafo a ser aberto.\nOs arquivos de grafos disponíveis são:")
         os.system("ls Graph")
         fileName = input("Insira nome do arquivo do grafo a ser aberto:")
@@ -194,56 +202,48 @@ class Grafo():
 
         file_lines = f.read().split("\n")
         split_line = file_lines.pop(0).split(" ")
-        # nodeAmt = int(split_line[1])
 
         split_line = file_lines.pop(0).split(" ")
-        print(split_line)
+        # Removing useless lines of the file
         while(split_line[0] != 'a' and split_line[0] != 'e'):
             split_line = file_lines.pop(0).split(" ")
+
         self.dirigido = split_line[0] == 'a'
-        # u = int(split_line[1])
-        print(split_line)
-        # self.source = 
         ponderado = True
+
         try:
             split_line[3]
         except:
             ponderado = False
 
-
+        # Enquanto houver linhas válidas no arquivo
         while(not split_line[0] == ""):
             u = int(split_line[1])-1
             v = int(split_line[2])-1
-            self.addNode(Node(u+1,u))
-            self.addNode(Node(v+1,v))
-            self.nodes[u].addNeighbour(v)
-            if(ponderado):
-                w = int(split_line[3])
-            else:
-                w = 1
-            self.addEdge(u,v,w)
+            w = int(split_line[3]) if ponderado else 1
+            nodeU = Node(u+1,u)
+            nodeV = Node(v+1,v)
+            self.addNode(nodeU)
+            self.addNode(nodeV)
+            self.nodes[u].addNeighbour(nodeV)
+            self.addEdge(nodeU,nodeV,w)
+            if(not self.dirigido):
+                self.nodes[v].addNeighbour(nodeU)
+                self.addEdge(nodeV,nodeU,w)
 
-            if(self.dirigido):
-                print(u)
-                print(v)
-                self.nodes[v].addNeighbour(u)
-                self.addEdge(v,u,w)
+            if(self.bipartido):
+                self.addToPartition1(nodeU)
+                self.addToPartition2(nodeV)
+                self.partition1[u].addNeighbour(nodeV)
+                if(not self.dirigido):
+                    self.partition2[v].addNeighbour(nodeU)
+
             if file_lines:
                 split_line = file_lines.pop(0).split(" ")
             else:
                 break
             # print("Criando nodo {} e {}".format(u,v))
-            
-            
-            
-            
-            
 
-
-
-
-        
-    
 def transposeGraph(grafo: Grafo):
     new_edges = []
     new_weights = dict()
