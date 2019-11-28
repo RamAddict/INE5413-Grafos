@@ -44,7 +44,7 @@ class Node():
 
 class Grafo():
     def __init__(self):
-        self.nodes = []
+        self.nodes = [None]*5000
         self.edges = set()
         self.edgeWeight = dict()
         self.dirigido = False
@@ -52,7 +52,7 @@ class Grafo():
         self.target = None
     
     def setSource(self, node):
-        self.ponderado = node
+        self.source = node
 
     def getSource(self):
         return self.source
@@ -97,7 +97,9 @@ class Grafo():
         return self.edges
 
     def addNode(self, node: Node):
-        self.nodes.append(node)
+        if(self.nodes[node.getIndex()] == None):
+            self.nodes.insert(node.getIndex(),node)
+
 
     def addEdge(self, u, v, w):
         self.edges.add((u,v))
@@ -174,9 +176,6 @@ class Grafo():
                 self.addEdge(self.nodes[v], self.nodes[u], w)
 
     def openFileGr(self):
-        self.nodes = []
-        self.edges = set()
-        self.edgeWeight = dict()
         self.dirigido = False
         print ("Escolha o grafo a ser aberto.\nOs arquivos de grafos disponíveis são:")
         os.system("ls Graph")
@@ -205,7 +204,41 @@ class Grafo():
         # u = int(split_line[1])
         print(split_line)
         # self.source = 
-        while(not split_line[0] = ""):
+        ponderado = True
+        try:
+            split_line[3]
+        except:
+            ponderado = False
+
+
+        while(not split_line[0] == ""):
+            u = int(split_line[1])-1
+            v = int(split_line[2])-1
+            self.addNode(Node(u+1,u))
+            self.addNode(Node(v+1,v))
+            self.nodes[u].addNeighbour(v)
+            if(ponderado):
+                w = int(split_line[3])
+            else:
+                w = 1
+            self.addEdge(u,v,w)
+
+            if(self.dirigido):
+                print(u)
+                print(v)
+                self.nodes[v].addNeighbour(u)
+                self.addEdge(v,u,w)
+            if file_lines:
+                split_line = file_lines.pop(0).split(" ")
+            else:
+                break
+            # print("Criando nodo {} e {}".format(u,v))
+            
+            
+            
+            
+            
+
 
 
 
