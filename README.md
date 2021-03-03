@@ -1,5 +1,5 @@
 # Graph project
-
+#### Made in collaboration with @https://github.com/ezequielpilcsuk
 # Running
 ``` bash
 git clone https://github.com/RamAddict/INE5413-Grafos
